@@ -9,9 +9,27 @@ import org.junit.jupiter.api.Test;
  */
 public class AutenticacionServicioTest {
     @Test
+    public void testRegistroExitoso() {
+        AutenticacionServicio servicio = new AutenticacionServicio();
+
+        boolean resultado = servicio.registrarBibliotecario("admin", "password123");
+
+        assertTrue(resultado, "El registro deberia ser exitoso para un bibliotecario nuevo");
+    }
+    
+    @Test
+    public void testRegistroDuplicado() {
+        AutenticacionServicio servicio = new AutenticacionServicio();
+
+        boolean resultado = servicio.registrarBibliotecario("admin", "password234");
+
+        assertFalse(resultado, "No se deberia poder registrar un bibliotecario con un username existente");
+    }
+    
+    @Test
     public void testInicioSesionExitoso() {
         AutenticacionServicio servicio = new AutenticacionServicio();
-        servicio.registrarBibliotecario("admin", "password123");
+        //servicio.registrarBibliotecario("admin", "password123");
 
         boolean resultado = servicio.iniciarSesion("admin", "password123");
 
