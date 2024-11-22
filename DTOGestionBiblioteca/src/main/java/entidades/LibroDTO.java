@@ -10,29 +10,34 @@ import java.util.Objects;
  *
  * @author luisa M
  */
-public class Libro {
+public class LibroDTO {
     private String id;
+    private String isbn;
     private String titulo;
     private String autor;
 
-    public Libro(String id, String titulo, String autor) {
-        this.id = id;
+    public LibroDTO(String isbn, String titulo, String autor) {
+        this.isbn = isbn;
         this.titulo = titulo;
         this.autor = autor;
     }
 
-    public Libro(String id) {
-        this.id = id;
+    public LibroDTO(String isbn) {
+        this.isbn = isbn;
     }
 
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public String getIsbn() {
+        return isbn;
     }
 
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
+    }
+    
     public String getTitulo() {
         return titulo;
     }
@@ -67,7 +72,7 @@ public class Libro {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Libro other = (Libro) obj;
+        final LibroDTO other = (LibroDTO) obj;
         return Objects.equals(this.id, other.id);
     }
 

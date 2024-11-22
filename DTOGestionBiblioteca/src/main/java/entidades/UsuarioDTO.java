@@ -10,12 +10,12 @@ import java.util.Objects;
  *
  * @author luisa M
  */
-public class Usuario {
+public class UsuarioDTO {
     private String id;
     private String nombre;
     private String email;
 
-    public Usuario(String id, String nombre, String email) {
+    public UsuarioDTO(String id, String nombre, String email) {
         this.id = id;
         this.nombre = nombre;
         this.email = email;
@@ -63,7 +63,7 @@ public class Usuario {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Usuario other = (Usuario) obj;
+        final UsuarioDTO other = (UsuarioDTO) obj;
         return Objects.equals(this.id, other.id);
     }
 

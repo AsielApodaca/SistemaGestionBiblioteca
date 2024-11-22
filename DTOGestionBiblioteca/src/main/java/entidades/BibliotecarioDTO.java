@@ -10,11 +10,11 @@ import java.util.Objects;
  *
  * @author luisa M
  */
-public class Bibliotecario {
+public class BibliotecarioDTO {
     private String usuario;
     private String contra;
 
-    public Bibliotecario(String usuario, String contra) {
+    public BibliotecarioDTO(String usuario, String contra) {
         this.usuario = usuario;
         this.contra = contra;
     }
@@ -53,7 +53,7 @@ public class Bibliotecario {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Bibliotecario other = (Bibliotecario) obj;
+        final BibliotecarioDTO other = (BibliotecarioDTO) obj;
         return Objects.equals(this.usuario, other.usuario);
     }
     
