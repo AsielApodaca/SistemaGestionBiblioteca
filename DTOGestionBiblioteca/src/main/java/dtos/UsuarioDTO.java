@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package entidades;
+package dtos;
 
 import java.util.Objects;
 
@@ -14,12 +14,6 @@ public class UsuarioDTO {
     private String id;
     private String nombre;
     private String email;
-
-    public UsuarioDTO(String id, String nombre, String email) {
-        this.id = id;
-        this.nombre = nombre;
-        this.email = email;
-    }
 
     public String getId() {
         return id;

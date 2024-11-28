@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package entidades;
+package dtos;
 
 import java.util.Objects;
 
@@ -15,15 +15,14 @@ public class LibroDTO {
     private String isbn;
     private String titulo;
     private String autor;
+    private boolean disponible;
 
-    public LibroDTO(String isbn, String titulo, String autor) {
-        this.isbn = isbn;
-        this.titulo = titulo;
-        this.autor = autor;
+    public boolean isDisponible() {
+        return disponible;
     }
 
-    public LibroDTO(String isbn) {
-        this.isbn = isbn;
+    public void setDisponible(boolean disponible) {
+        this.disponible = disponible;
     }
 
     public String getId() {
