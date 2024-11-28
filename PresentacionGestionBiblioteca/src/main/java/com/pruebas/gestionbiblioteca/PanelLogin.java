@@ -4,17 +4,23 @@
  */
 package com.pruebas.gestionbiblioteca;
 
+import dtos.BibliotecarioDTO;
+import fachada.FachadaGestionBiblioteca;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+
 /**
  *
  * @author luisa M
  */
 public class PanelLogin extends javax.swing.JPanel {
-
+    private FachadaGestionBiblioteca gestor;
     /**
      * Creates new form PanelLogin
      */
-    public PanelLogin() {
+    public PanelLogin(FachadaGestionBiblioteca gestor) {
         initComponents();
+        this.gestor = gestor;
     }
 
     /**
@@ -43,6 +49,11 @@ public class PanelLogin extends javax.swing.JPanel {
         jButton1.setBackground(new java.awt.Color(0, 153, 0));
         jButton1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jButton1.setText("Ingresar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         txtUser.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -94,7 +105,7 @@ public class PanelLogin extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(39, 39, 39)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtUser, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
@@ -112,7 +123,30 @@ public class PanelLogin extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtPassActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        if(login()){
+            ((Frame) SwingUtilities.getWindowAncestor(PanelLogin.this)).mostrarVentana("PanelDashboard");
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
+    private boolean login(){
+        if(!camposVacios()){
+            String user = txtUser.getText();
+            String pass = String.copyValueOf(txtPass.getPassword());
+            BibliotecarioDTO bibliotecario = new BibliotecarioDTO(user, pass);
+            if (gestor.iniciarSesion(bibliotecario)){
+                return true;
+            }
+            JOptionPane.showMessageDialog(this, "Credenciales incorrectas");
+        }else
+            JOptionPane.showMessageDialog(this, "No puede dejar campos vacios");
+        return false;
+    }
+    
+    private boolean camposVacios(){
+        return txtUser.getText().isBlank() || String.copyValueOf(txtPass.getPassword()).isBlank();
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;

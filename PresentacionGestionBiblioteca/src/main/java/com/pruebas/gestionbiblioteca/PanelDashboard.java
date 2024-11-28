@@ -4,17 +4,21 @@
  */
 package com.pruebas.gestionbiblioteca;
 
+import fachada.FachadaGestionBiblioteca;
+import javax.swing.SwingUtilities;
+
 /**
  *
  * @author luisa M
  */
 public class PanelDashboard extends javax.swing.JPanel {
-
+    private FachadaGestionBiblioteca gestor;
     /**
      * Creates new form PanelDashboard
      */
-    public PanelDashboard() {
+    public PanelDashboard(FachadaGestionBiblioteca gestor) {
         initComponents();
+        this.gestor = gestor;
     }
 
     /**
@@ -45,6 +49,7 @@ public class PanelDashboard extends javax.swing.JPanel {
         filtros = new javax.swing.JComboBox<>();
         jScrollPane2 = new javax.swing.JScrollPane();
         tablaLibros = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
         panelPrestamos = new javax.swing.JPanel();
         btnRegistrarPrestamo = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -111,6 +116,22 @@ public class PanelDashboard extends javax.swing.JPanel {
         tablaUsuarios.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         tablaUsuarios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
                 {null, null, null, null, null},
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -198,6 +219,22 @@ public class PanelDashboard extends javax.swing.JPanel {
                 {null, null, null, null},
                 {null, null, null, null},
                 {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
                 {null, null, null, null}
             },
             new String [] {
@@ -214,6 +251,10 @@ public class PanelDashboard extends javax.swing.JPanel {
         });
         jScrollPane2.setViewportView(tablaLibros);
 
+        jButton1.setBackground(new java.awt.Color(0, 153, 0));
+        jButton1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jButton1.setText("Agregar libro");
+
         javax.swing.GroupLayout panelLibrosLayout = new javax.swing.GroupLayout(panelLibros);
         panelLibros.setLayout(panelLibrosLayout);
         panelLibrosLayout.setHorizontalGroup(
@@ -228,7 +269,9 @@ public class PanelDashboard extends javax.swing.JPanel {
                 .addGap(59, 59, 59))
             .addGroup(panelLibrosLayout.createSequentialGroup()
                 .addGap(35, 35, 35)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 576, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(panelLibrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 576, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelLibrosLayout.setVerticalGroup(
@@ -245,7 +288,9 @@ public class PanelDashboard extends javax.swing.JPanel {
                         .addComponent(filtros, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(64, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(81, Short.MAX_VALUE))
         );
 
         tab1.addTab("Libros", panelLibros);
@@ -264,6 +309,22 @@ public class PanelDashboard extends javax.swing.JPanel {
         tablaPrestamos.setBackground(new java.awt.Color(255, 255, 255));
         tablaPrestamos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
                 {null, null, null, null, null},
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -321,6 +382,22 @@ public class PanelDashboard extends javax.swing.JPanel {
         tablaDevoluciones.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         tablaDevoluciones.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
@@ -394,6 +471,7 @@ public class PanelDashboard extends javax.swing.JPanel {
 
     private void btnRegistrarPrestamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarPrestamoActionPerformed
         // TODO add your handling code here:
+        ((Frame) SwingUtilities.getWindowAncestor(PanelDashboard.this)).mostrarVentana("PanelRegistro");
     }//GEN-LAST:event_btnRegistrarPrestamoActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
@@ -411,6 +489,7 @@ public class PanelDashboard extends javax.swing.JPanel {
     private javax.swing.JButton btnRegistrarDev;
     private javax.swing.JButton btnRegistrarPrestamo;
     private javax.swing.JComboBox<String> filtros;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;

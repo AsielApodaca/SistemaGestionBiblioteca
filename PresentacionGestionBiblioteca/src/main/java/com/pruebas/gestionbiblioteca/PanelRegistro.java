@@ -4,17 +4,20 @@
  */
 package com.pruebas.gestionbiblioteca;
 
+import fachada.FachadaGestionBiblioteca;
+
 /**
  *
  * @author luisa M
  */
 public class PanelRegistro extends javax.swing.JPanel {
-
+    private FachadaGestionBiblioteca gestor;
     /**
      * Creates new form PanelRegistro
      */
-    public PanelRegistro() {
+    public PanelRegistro(FachadaGestionBiblioteca gestor) {
         initComponents();
+        this.gestor = gestor;
     }
 
     /**
