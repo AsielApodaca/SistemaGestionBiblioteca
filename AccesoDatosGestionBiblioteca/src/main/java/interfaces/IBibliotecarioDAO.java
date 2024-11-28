@@ -12,4 +12,6 @@ import entidades.Bibliotecario;
  */
 public interface IBibliotecarioDAO {
     public Bibliotecario obtenerBibliotecario(String id);
+    
+    public boolean agregarBibliotecario(Bibliotecario bibliotecario);
 }

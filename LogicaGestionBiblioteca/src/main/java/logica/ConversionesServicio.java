@@ -66,16 +66,15 @@ public class ConversionesServicio {
         return usuarioDTO;
     }
     
-    public PrestamoDTO convertirPrestamo(Prestamo prestamo){
-        PrestamoDTO dto = new PrestamoDTO();
-        dto.setEmailUsuario(prestamo.getUsuario().getEmail());
-        if(prestamo.getFechaDevolucion() != null){
-            dto.setFechaDevolucion(prestamo.getFechaDevolucion());
-        }
-        dto.setFechaLimite(prestamo.getFechaLimite());
-        dto.setFechaRegistro(prestamo.getFechaPrestamo());
-        dto.setIsbnLibro(prestamo.getLibro().getIsbn());
-        return dto;
-    }
+    public PrestamoDTO convertirPrestamo(Prestamo prestamo) {
+    PrestamoDTO dto = new PrestamoDTO();
+    dto.setEmailUsuario(prestamo.getUsuario().getEmail());
+    dto.setFechaRegistro(prestamo.getFechaPrestamo());
+    dto.setIsbnLibro(prestamo.getLibro().getIsbn());
+    dto.setTituloLibro(prestamo.getLibro().getTitulo());
+    dto.setAutorLibro(prestamo.getLibro().getAutor());
+    return dto;
+}
+
     
 }

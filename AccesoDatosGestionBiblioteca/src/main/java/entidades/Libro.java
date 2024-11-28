@@ -31,12 +31,15 @@ public class Libro implements Serializable{
     private String titulo;
     @Column(name="autor")
     private String autor;
+    @Column(name="disponible")
+    private boolean disponible;
 
-    public Libro(Long id, String isbn, String titulo, String autor) {
+    public Libro(Long id, String isbn, String titulo, String autor, boolean disponible) {
         this.id = id;
         this.isbn = isbn;
         this.titulo = titulo;
         this.autor = autor;
+        this.disponible = disponible;
     }
 
     public Libro(String isbn) {
@@ -73,7 +76,13 @@ public class Libro implements Serializable{
         return id;
     }
 
-    
+    public boolean isDisponible() {
+        return disponible;
+    }
+
+    public void setDisponible(boolean disponible) {
+        this.disponible = disponible;
+    }
     
     @Override
     public int hashCode() {

@@ -56,7 +56,6 @@ public class PrestamoDevolucionServicio {
             prestamoNuevo.setLibro(libroPrestamo);
             prestamoNuevo.setUsuario(usuario);
             prestamoNuevo.setFechaPrestamo(Calendar.getInstance());
-            prestamoNuevo.setFechaLimite(prestamo.getFechaLimite());
             libroDAO.actualizarDisponibilidadLibro(libroPrestamo);
             return prestamoDAO.registrarPrestamo(prestamoNuevo);
         }
@@ -71,7 +70,7 @@ public class PrestamoDevolucionServicio {
         
         prestamo = prestamoDAO.buscarPrestamoPorLibro(prestamo);
         
-        if(prestamo != null && prestamo.getFechaDevolucion() == null){
+        if(prestamo != null){
             Libro libroDevuelto = libroDAO.buscarLibroPorIsbn(libro);
             libroDAO.actualizarDisponibilidadLibro(libroDevuelto);
             return prestamoDAO.agregarFechaDevolucion(prestamo);

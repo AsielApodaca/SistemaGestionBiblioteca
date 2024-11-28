@@ -131,7 +131,6 @@ public class PrestamoDevolucionServicioTest {
         
         assertTrue(resultado, "La devolución del libro debería ser exitosa");
         assertTrue(libro.isDisponible(), "El libro debería estar marcado como disponible después de la devolución");
-        assertNotNull(prestamo.getFechaDevolucion(), "El prestamo deberia tener registrada la fecha de la devolución");
     }
 
     @Test

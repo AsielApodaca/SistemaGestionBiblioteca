@@ -12,6 +12,8 @@ import java.util.Calendar;
  */
 public class PrestamoDTO {
     private String isbnLibro;
+    private String tituloLibro;
+    private String autorLibro;
     private String emailUsuario;
     private Calendar fechaRegistro;
     private Calendar fechaLimite;
@@ -20,20 +22,28 @@ public class PrestamoDTO {
     public PrestamoDTO() {
     }
 
-    public Calendar getFechaDevolucion() {
-        return fechaDevolucion;
-    }
-
-    public void setFechaDevolucion(Calendar fechaDevolucion) {
-        this.fechaDevolucion = fechaDevolucion;
-    }
-
     public String getIsbnLibro() {
         return isbnLibro;
     }
 
     public void setIsbnLibro(String isbnLibro) {
         this.isbnLibro = isbnLibro;
+    }
+
+    public String getTituloLibro() {
+        return tituloLibro;
+    }
+
+    public void setTituloLibro(String tituloLibro) {
+        this.tituloLibro = tituloLibro;
+    }
+
+    public String getAutorLibro() {
+        return autorLibro;
+    }
+
+    public void setAutorLibro(String autorLibro) {
+        this.autorLibro = autorLibro;
     }
 
     public String getEmailUsuario() {
@@ -59,6 +69,12 @@ public class PrestamoDTO {
     public void setFechaLimite(Calendar fechaLimite) {
         this.fechaLimite = fechaLimite;
     }
-    
-    
+
+    public Calendar getFechaDevolucion() {
+        return fechaDevolucion;
+    }
+
+    public void setFechaDevolucion(Calendar fechaDevolucion) {
+        this.fechaDevolucion = fechaDevolucion;
+    }
 }

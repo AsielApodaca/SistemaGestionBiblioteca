@@ -5,6 +5,7 @@
 package interfaces;
 
 import entidades.Usuario;
+import java.util.List;
 
 /**
  *
@@ -12,7 +13,11 @@ import entidades.Usuario;
  */
 public interface IUsuarioDAO {
     public Usuario obtenerUsuario(String id);
+    public Usuario obtenerUsuarioPorEmail(Usuario usuario);
     public Usuario agregarUsuario(Usuario usuario);
+    public boolean eliminarUsuario(Usuario usuario);
+    public boolean actualizarUsuario(Usuario usuario);
     public boolean actualizarEmailUsuario(Usuario usuario);
     public boolean actualizarNombreUsuario(Usuario usuario);
+    public List<Usuario> obtenerUsuarios();
 }

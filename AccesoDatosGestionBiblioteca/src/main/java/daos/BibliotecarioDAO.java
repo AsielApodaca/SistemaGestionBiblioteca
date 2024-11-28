@@ -19,7 +19,7 @@ import javax.persistence.criteria.Root;
  *
  * @author luisa M
  */
-public class BibliotecarioDAO implements IBibliotecarioDAO{
+public class BibliotecarioDAO implements IBibliotecarioDAO {
     private EntityManager em;
     private CriteriaBuilder cb;
     private final static Logger LOG = Logger.getLogger(BibliotecarioDAO.class.getName());
@@ -30,20 +30,35 @@ public class BibliotecarioDAO implements IBibliotecarioDAO{
     }
     
     @Override
-    public Bibliotecario obtenerBibliotecario(String id){
-        CriteriaQuery<Bibliotecario> criteria=cb.createQuery(Bibliotecario.class);
-        Root<Bibliotecario> root=criteria.from(Bibliotecario.class);
+    public Bibliotecario obtenerBibliotecario(String id) {
+        CriteriaQuery<Bibliotecario> criteria = cb.createQuery(Bibliotecario.class);
+        Root<Bibliotecario> root = criteria.from(Bibliotecario.class);
 
         Predicate predicate = cb.equal(root.get("id"), id);
         criteria.select(root).where(predicate);
         
-        TypedQuery<Bibliotecario> query=em.createQuery(criteria);
+        TypedQuery<Bibliotecario> query = em.createQuery(criteria);
         try {
-            Bibliotecario bibliotecarioConsultado=query.getSingleResult();
-            return bibliotecarioConsultado;
+            return query.getSingleResult();
         } catch (Exception e) {
-            LOG.log(Level.SEVERE, e.getMessage() , e);
+            LOG.log(Level.SEVERE, e.getMessage(), e);
         }
         return null;
+    }
+
+    @Override
+    public boolean agregarBibliotecario(Bibliotecario bibliotecario) {
+        try {
+            em.getTransaction().begin();
+            em.persist(bibliotecario);
+            em.getTransaction().commit();
+            return true;
+        } catch (Exception e) {
+            LOG.log(Level.SEVERE, "Error al agregar el bibliotecario: " + e.getMessage(), e);
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+        }
+        return false;
     }
 }

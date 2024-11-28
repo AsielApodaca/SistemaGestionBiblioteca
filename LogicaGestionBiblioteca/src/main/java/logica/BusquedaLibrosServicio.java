@@ -18,7 +18,7 @@ public class BusquedaLibrosServicio {
     private ILibroDAO libroDAO;
     
     public BusquedaLibrosServicio(){
-        libroDAO = new LibroDAO();
+        this.libroDAO = new LibroDAO();
     }
     
     public Libro buscarLibroPorIsbn(LibroDTO libro){
