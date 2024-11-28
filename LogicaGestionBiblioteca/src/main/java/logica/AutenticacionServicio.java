@@ -4,7 +4,11 @@
  */
 package logica;
 
+import daos.BibliotecarioDAO;
 import entidades.Bibliotecario;
+import dtos.BibliotecarioDTO;
+import interfaces.IBibliotecarioDAO;
+import java.util.List;
 
 /**
  *
@@ -13,23 +17,26 @@ import entidades.Bibliotecario;
 public class AutenticacionServicio {
     private IBibliotecarioDAO bibliotecarioDAO;
     
-    public boolean registrarBibliotecario(String usuario, String contra){
-        if(buscarBibliotecario(usuario) != null){
-            return bibliotecarioDAO.registrarBibliotecario(new Bibliotecario(usuario, contra));
-        }
-        return false;
+    public AutenticacionServicio(){
+        bibliotecarioDAO = new BibliotecarioDAO();
     }
     
-    public boolean iniciarSesion(String usuario, String contra){
-        Bibliotecario bibliotecarioBuscado = buscarBibliotecario(usuario);
+    public boolean agregarBibliotecarios(){
+        return bibliotecarioDAO.agregarBibliotecarios();
+    }
+    
+    public boolean iniciarSesion(BibliotecarioDTO bibliotecario){
+        Bibliotecario bibliotecarioBuscado = buscarBibliotecario(bibliotecario);
         if(bibliotecarioBuscado != null){
-            return validarCredenciales(bibliotecarioBuscado, contra);
+            return validarCredenciales(bibliotecarioBuscado, bibliotecario.getContra());
         }
         return false;
     }
     
-    private Bibliotecario buscarBibliotecario(String username){
-        return bibliotecarioDAO.buscarBibliotecario(username);
+    private Bibliotecario buscarBibliotecario(BibliotecarioDTO bibliotecario){
+        Bibliotecario bibliotecarioBuscado = new Bibliotecario();
+        bibliotecarioBuscado.setUsuario(bibliotecario.getUsuario());
+        return bibliotecarioDAO.obtenerBibliotecario(bibliotecarioBuscado);
     }
     
     private boolean validarCredenciales(Bibliotecario bibliotecario, String contra){

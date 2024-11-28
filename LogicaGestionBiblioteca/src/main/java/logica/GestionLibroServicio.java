@@ -4,7 +4,11 @@
  */
 package logica;
 
+import daos.LibroDAO;
 import entidades.Libro;
+import dtos.LibroDTO;
+import interfaces.ILibroDAO;
+import java.util.List;
 
 /**
  *
@@ -13,18 +17,41 @@ import entidades.Libro;
 public class GestionLibroServicio {
     private ILibroDAO libroDAO;
     
-    public boolean agregarLibro(Libro libro){
-        if(buscarLibro(libro.getId()) == null){
-            return libroDAO.registrarLibro(libro);
+    public GestionLibroServicio(){
+        libroDAO = new LibroDAO();
+    }
+    
+    public List<Libro> agregarLibros(){
+        return libroDAO.agregarLibros();
+    }
+    
+    public boolean agregarLibro(LibroDTO libroDTO){
+        if(buscarLibro(libroDTO.getIsbn()) == null){
+            Libro libroNuevo = new Libro(libroDTO.getIsbn());
+            libroNuevo.setAutor(libroDTO.getAutor());
+            libroNuevo.setTitulo(libroDTO.getTitulo());
+            return libroDAO.registrarLibro(libroNuevo);
         }
         return false;
     }
     
-    public boolean modificarLibro(Libro libro){
-        Libro libroActual = buscarLibro(libro.getId());
+    public boolean eliminarLibro(LibroDTO libroDTO){
+        Libro libro = buscarLibro(libroDTO.getIsbn());
+        if (libro != null) {
+            return libroDAO.eliminarLibro(libro);
+        }
+        return false;
+    }
+    
+    public boolean modificarLibro(LibroDTO libroDTO){
+        Libro libroActual = buscarLibro(libroDTO.getIsbn());
         if(libroActual != null){
-            if(validarModificaciones(libroActual, libro))
-                return libroDAO.actualizarLibro(libro);
+            Libro libroModificado = new Libro(libroDTO.getIsbn());
+            libroModificado.setAutor(libroDTO.getAutor());
+            libroModificado.setTitulo(libroDTO.getTitulo());
+            libroModificado.setId(libroActual.getId());
+            if(validarModificaciones(libroActual, libroModificado))
+                return libroDAO.actualizarLibro(libroModificado);
         }
         return false;
     }
@@ -34,7 +61,8 @@ public class GestionLibroServicio {
                 !libroActual.getTitulo().equals(libroModificado.getTitulo());
     }
     
-    private Libro buscarLibro(String idLibro){
-        return libroDAO.buscarLibroPorId(idLibro);
+    private Libro buscarLibro(String isbn){
+        Libro libro = new Libro(isbn);
+        return libroDAO.buscarLibroPorIsbn(libro);
     }
 }

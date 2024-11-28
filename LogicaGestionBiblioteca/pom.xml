@@ -8,12 +8,12 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>DominioGestionBiblioteca</artifactId>
+            <artifactId>AccesoDatosGestionBiblioteca</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>PresentacionGestionBiblioteca</artifactId>
+            <artifactId>DTOGestionBiblioteca</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
