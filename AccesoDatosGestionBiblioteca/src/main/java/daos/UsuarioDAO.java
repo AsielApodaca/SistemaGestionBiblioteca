@@ -21,66 +21,81 @@ import javax.persistence.criteria.Root;
  *
  * @author luisa M
  */
-public class UsuarioDAO implements IUsuarioDAO{
+public class UsuarioDAO implements IUsuarioDAO {
+
     private EntityManager em;
     private CriteriaBuilder cb;
-    private final static Logger LOG= Logger.getLogger(UsuarioDAO.class.getName());
-    
-    public UsuarioDAO(){
-        em=ConexionBD.getEntityManager();
-        cb=em.getCriteriaBuilder();
+    private final static Logger LOG = Logger.getLogger(UsuarioDAO.class.getName());
+
+    public UsuarioDAO() {
+        em = ConexionBD.getEntityManager();
+        cb = em.getCriteriaBuilder();
     }
-    
+
     @Override
-    public Usuario obtenerUsuario(String id){
-        CriteriaQuery<Usuario> criteria=cb.createQuery(Usuario.class);
-        Root<Usuario> root=criteria.from(Usuario.class);
+    public Usuario obtenerUsuario(String id) {
+        CriteriaQuery<Usuario> criteria = cb.createQuery(Usuario.class);
+        Root<Usuario> root = criteria.from(Usuario.class);
 
         Predicate predicate = cb.equal(root.get("id"), id);
         criteria.select(root).where(predicate);
-        
-        TypedQuery<Usuario> query=em.createQuery(criteria);
+
+        TypedQuery<Usuario> query = em.createQuery(criteria);
         try {
-            Usuario personaConsultada=query.getSingleResult();
+            Usuario personaConsultada = query.getSingleResult();
             return personaConsultada;
         } catch (Exception e) {
-            LOG.log(Level.SEVERE, e.getMessage() , e);
+            LOG.log(Level.SEVERE, e.getMessage(), e);
         }
         return null;
     }
-    
+
     @Override
-    public Usuario agregarUsuario(Usuario usuario){
-        StoredProcedureQuery spc=em.createStoredProcedureQuery("sp_agregar_usuario",Usuario.class);
+    public Usuario agregarUsuario(Usuario usuario) {
+        StoredProcedureQuery spc = em.createStoredProcedureQuery("sp_agregar_usuario", Usuario.class);
         try {
             if (spc.execute()) {
-                Long idNuevo = (Long)spc.getOutputParameterValue("idNuevo");
+                Long idNuevo = (Long) spc.getOutputParameterValue("idNuevo");
                 usuario.setId(idNuevo);
                 return usuario;
             }
         } catch (Exception e) {
-            LOG.log(Level.SEVERE, e.getMessage() , e); 
+            LOG.log(Level.SEVERE, e.getMessage(), e);
         }
         return null;
     }
-    
-    public boolean actualizarEmailUsuario(Usuario usuario){
+
+    public boolean actualizarEmailUsuario(Usuario usuario) {
         Usuario usuarioBuscado = em.find(Usuario.class, usuario.getId());
-        if(usuarioBuscado != null){
+        if (usuarioBuscado != null) {
             try {
                 usuarioBuscado.setEmail(usuario.getEmail());
                 usuarioBuscado = em.merge(usuarioBuscado);
-                System.out.println("usuario act: "+usuarioBuscado);
+                System.out.println("usuario act: " + usuarioBuscado);
                 return true;
             } catch (Exception e) {
-                LOG.log(Level.SEVERE, e.getMessage() , e); 
+                LOG.log(Level.SEVERE, e.getMessage(), e);
             }
         }
         return false;
-        
+
     }
-    
-    public boolean actualizarNombreUsuario(Usuario usuario){
-        
+
+    public boolean actualizarNombreUsuario(Usuario usuario) {
+        Usuario usuarioBuscado = em.find(Usuario.class, usuario.getId());
+        if (usuarioBuscado != null) {
+            try {
+                usuarioBuscado.setNombre(usuario.getNombre());
+                usuarioBuscado = em.merge(usuarioBuscado);
+                LOG.log(Level.INFO, "Nombre actualizado exitosamente para el usuario con ID: {0}", usuarioBuscado.getId());
+                return true;
+            } catch (Exception e) {
+                LOG.log(Level.SEVERE, e.getMessage(), e);
+            }
+        } else {
+            LOG.log(Level.WARNING, "Usuario con ID {0} no encontrado para actualización", usuario.getId());
+        }
+        return false;
     }
+
 }

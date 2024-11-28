@@ -13,4 +13,6 @@ import entidades.Usuario;
 public interface IUsuarioDAO {
     public Usuario obtenerUsuario(String id);
     public Usuario agregarUsuario(Usuario usuario);
+    public boolean actualizarEmailUsuario(Usuario usuario);
+    public boolean actualizarNombreUsuario(Usuario usuario);
 }
