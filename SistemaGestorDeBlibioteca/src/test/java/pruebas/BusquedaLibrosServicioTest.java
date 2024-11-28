@@ -4,7 +4,11 @@
  */
 package pruebas;
 
+import dtos.LibroDTO;
+import entidades.Libro;
 import java.util.List;
+import logica.BusquedaLibrosServicio;
+import logica.GestionLibroServicio;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,62 +19,84 @@ import org.junit.jupiter.api.Test;
  */
 public class BusquedaLibrosServicioTest {
 
-    private GestionLibrosServicio gestionLibrosServicio;
+    private GestionLibroServicio gestionLibrosServicio;
     private BusquedaLibrosServicio busquedaLibrosServicio;
 
     @BeforeEach
     public void setUp() {
-        gestionLibrosServicio = new GestionLibrosServicio();
-        busquedaLibrosServicio = new BusquedaLibrosServicio(gestionLibrosServicio);
+        gestionLibrosServicio = new GestionLibroServicio();
+        busquedaLibrosServicio = new BusquedaLibrosServicio();
 
         // Agregar libros al catálogo para las pruebas
-        gestionLibrosServicio.agregarLibro(new Libro("001", "El Quijote", "Miguel de Cervantes", true));
-        gestionLibrosServicio.agregarLibro(new Libro("002", "Cien Años de Soledad", "Gabriel García Márquez", true));
-        gestionLibrosServicio.agregarLibro(new Libro("003", "1984", "George Orwell", true));
+        gestionLibrosServicio.agregarLibros();
+        /*
+        'Cien años de soledad', 'Gabriel García Márquez', '978-0307474728', true
+	'Don Quijote de la Mancha', 'Miguel de Cervantes', '978-8420412146', true
+	'1984', 'George Orwell', '978-0451524935', false
+	'El principito', 'Antoine de Saint-Exupéry', '978-0156012195', true
+	'Rayuela', 'Julio Cortázar', '978-8437604572', false
+	'La casa de los espíritus', 'Isabel Allende', '978-0525433477', true
+	'El laberinto de la soledad', 'Octavio Paz', '978-9681603011', true
+	'Pedro Páramo', 'Juan Rulfo', '978-0802133908', false
+	'La sombra del viento', 'Carlos Ruiz Zafón', '978-0143034902', true
+	'Los detectives salvajes', 'Roberto Bolaño', '978-0312427481', true
+        */
     }
 
     @Test
     public void testBuscarLibroPorTitulo() {
-        List<Libro> resultados = busquedaLibrosServicio.buscarLibrosPorTitulo("El Quijote");
+        LibroDTO dto = new LibroDTO();
+        dto.setTitulo("Don Quijote de la Mancha");
+        List<Libro> resultados = busquedaLibrosServicio.buscarLibrosPorTitulo(dto);
 
-        assertEquals(1, resultados.size(), "Debería encontrar un libro con el título 'El Quijote'");
-        assertEquals("El Quijote", resultados.get(0).getTitulo(), "El título del libro encontrado debería ser 'El Quijote'");
+        assertEquals(1, resultados.size(), "Debería encontrar un libro con el título 'Don Quijote de la Mancha'");
+        assertEquals("Don Quijote de la Mancha", resultados.get(0).getTitulo(), "El título del libro encontrado debería ser 'Don Quijote de la Mancha'");
     }
 
     @Test
     public void testBuscarLibroPorAutor() {
-        List<Libro> resultados = busquedaLibrosServicio.buscarLibrosPorAutor("Gabriel García Márquez");
+        LibroDTO dto = new LibroDTO();
+        dto.setAutor("Gabriel García Márquez");
+        List<Libro> resultados = busquedaLibrosServicio.buscarLibrosPorAutor(dto);
 
         assertEquals(1, resultados.size(), "Debería encontrar un libro del autor 'Gabriel García Márquez'");
-        assertEquals("Cien Años de Soledad", resultados.get(0).getTitulo(), "El título del libro encontrado debería ser 'Cien Años de Soledad'");
+        assertEquals("Cien años de soledad", resultados.get(0).getTitulo(), "El título del libro encontrado debería ser 'Cien años de soledad'");
     }
 
     @Test
     public void testBuscarLibroPorIdentificador() {
-        Libro resultado = busquedaLibrosServicio.buscarLibroPorId("003");
+        LibroDTO dto = new LibroDTO();
+        dto.setIsbn("978-0451524935");
+        Libro resultado = busquedaLibrosServicio.buscarLibroPorIsbn(dto);
 
-        assertNotNull(resultado, "Debería encontrar un libro con el identificador '003'");
+        assertNotNull(resultado, "Debería encontrar un libro con el identificador '978-0451524935'");
         assertEquals("1984", resultado.getTitulo(), "El título del libro encontrado debería ser '1984'");
     }
 
     @Test
     public void testBuscarLibroNoExistentePorTitulo() {
-        List<Libro> resultados = busquedaLibrosServicio.buscarLibrosPorTitulo("Don Quijote");
+        LibroDTO dto = new LibroDTO();
+        dto.setTitulo("Don Quijote");
+        List<Libro> resultados = busquedaLibrosServicio.buscarLibrosPorTitulo(dto);
 
-        assertTrue(resultados.isEmpty(), "No debería encontrar ningún libro con el título 'Don Quijote'");
+        assertNull(resultados, "No debería encontrar ningún libro con el título 'Don Quijote'");
     }
 
     @Test
     public void testBuscarLibroNoExistentePorAutor() {
-        List<Libro> resultados = busquedaLibrosServicio.buscarLibrosPorAutor("Autor Desconocido");
+        LibroDTO dto = new LibroDTO();
+        dto.setAutor("Autor Desconocido");
+        List<Libro> resultados = busquedaLibrosServicio.buscarLibrosPorAutor(dto);
 
-        assertTrue(resultados.isEmpty(), "No debería encontrar ningún libro del autor 'Autor Desconocido'");
+        assertNull(resultados, "No debería encontrar ningún libro del autor 'Autor Desconocido'");
     }
 
     @Test
     public void testBuscarLibroNoExistentePorIdentificador() {
-        Libro resultado = busquedaLibrosServicio.buscarLibroPorId("999");
+        LibroDTO dto = new LibroDTO();
+        dto.setIsbn("000-1111111111");
+        Libro resultado = busquedaLibrosServicio.buscarLibroPorIsbn(dto);
 
-        assertNull(resultado, "No debería encontrar ningún libro con el identificador '999'");
+        assertNull(resultado, "No debería encontrar ningún libro con el identificador '000-1111111111'");
     }
 }
