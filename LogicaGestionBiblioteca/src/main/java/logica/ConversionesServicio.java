@@ -69,8 +69,9 @@ public class ConversionesServicio {
     public PrestamoDTO convertirPrestamo(Prestamo prestamo){
         PrestamoDTO dto = new PrestamoDTO();
         dto.setEmailUsuario(prestamo.getUsuario().getEmail());
-        if(prestamo.getFechaDevolucion() != null)
+        if(prestamo.getFechaDevolucion() != null){
             dto.setFechaDevolucion(prestamo.getFechaDevolucion());
+        }
         dto.setFechaLimite(prestamo.getFechaLimite());
         dto.setFechaRegistro(prestamo.getFechaPrestamo());
         dto.setIsbnLibro(prestamo.getLibro().getIsbn());

@@ -49,7 +49,6 @@ public class GestionLibroServicio {
             Libro libroModificado = new Libro(libroDTO.getIsbn());
             libroModificado.setAutor(libroDTO.getAutor());
             libroModificado.setTitulo(libroDTO.getTitulo());
-            libroModificado.setId(libroActual.getId());
             if(validarModificaciones(libroActual, libroModificado))
                 return libroDAO.actualizarLibro(libroModificado);
         }
