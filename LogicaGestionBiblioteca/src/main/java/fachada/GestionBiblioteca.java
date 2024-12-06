@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package fachada;
 
 import dtos.BibliotecarioDTO;
@@ -10,9 +7,9 @@ import dtos.LibroDTO;
 import dtos.PrestamoDTO;
 import dtos.UsuarioDTO;
 import entidades.Bibliotecario;
-
 import entidades.Libro;
 import entidades.Prestamo;
+import entidades.Usuario;
 import java.util.ArrayList;
 import java.util.List;
 import logica.AutenticacionServicio;
@@ -83,15 +80,18 @@ public class GestionBiblioteca implements FachadaGestionBiblioteca {
         switch (criterio) {
             case AUTOR ->{
                 List<Libro> libros = busquedaLibro.buscarLibrosPorAutor(libroDTO);
-                librosDTO.addAll(convertidor.convertirLibros(libros));
+                if(libros != null)
+                    librosDTO.addAll(convertidor.convertirLibros(libros));
             }
             case ISBN -> {
                 Libro libro = busquedaLibro.buscarLibroPorIsbn(libroDTO);
-                librosDTO.add(convertidor.convertirLibro(libro));
+                if(libro != null)
+                    librosDTO.add(convertidor.convertirLibro(libro));
             }
             case TITULO -> {
                 List<Libro> libros = busquedaLibro.buscarLibrosPorTitulo(libroDTO);
-                librosDTO.addAll(convertidor.convertirLibros(libros));
+                if(libros != null)
+                    librosDTO.addAll(convertidor.convertirLibros(libros));
             }
         }
         return librosDTO;
@@ -99,7 +99,12 @@ public class GestionBiblioteca implements FachadaGestionBiblioteca {
 
     @Override
     public List<UsuarioDTO> buscarUsuarios() {
-        return convertidor.convertirUsuarios(gestionUsuarios.buscarUsuarios());
+        List<Usuario> usuarios = gestionUsuarios.buscarUsuarios();
+        System.out.println("usuarios del dao: "+usuarios);
+        if(usuarios != null)
+            return convertidor.convertirUsuarios(usuarios);
+        System.out.println("usuarios null");
+        return null;
     }
 
     @Override

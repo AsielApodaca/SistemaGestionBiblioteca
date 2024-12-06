@@ -4,7 +4,12 @@
  */
 package com.pruebas.gestionbiblioteca;
 
+import dtos.LibroDTO;
+import dtos.UsuarioDTO;
 import fachada.FachadaGestionBiblioteca;
+import fachada.TipoAccion;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -12,6 +17,12 @@ import fachada.FachadaGestionBiblioteca;
  */
 public class PanelRegistro extends javax.swing.JPanel {
     private FachadaGestionBiblioteca gestor;
+    private UsuarioDTO usuarioAgregado;
+    private LibroDTO libroAgregado;
+    protected static final int REGISTRAR_LIBRO = 1;
+    protected static final int REGISTRAR_USUARIO = 2;
+    protected static final int REGISTRAR_PRESTAMO = 3;
+    private static int tipoRegistro;
     /**
      * Creates new form PanelRegistro
      */
@@ -19,7 +30,39 @@ public class PanelRegistro extends javax.swing.JPanel {
         initComponents();
         this.gestor = gestor;
     }
-
+    
+    protected static void setUpLabels(int tipoRegistro){
+        switch (tipoRegistro) {
+            case REGISTRAR_LIBRO-> setUpLibro();
+            case REGISTRAR_PRESTAMO->setUpPrestamo();
+            case REGISTRAR_USUARIO->setUpUsuario();
+        }
+    }
+    
+    private static void setUpLibro(){
+        lbl1.setText("ISBN:");
+        lbl2.setText("Titulo:");
+        lbl3.setText("Autor:");
+        lbl3.setVisible(true);
+        txt3.setVisible(true);
+        tipoRegistro= REGISTRAR_LIBRO;
+    }
+    
+    private static void setUpPrestamo(){
+        lbl1.setText("Email usuario:");
+        lbl2.setText("ISBN libro:");
+        lbl3.setText("Fecha limite:");
+        lbl3.setVisible(true);
+        txt3.setVisible(true);
+        tipoRegistro= REGISTRAR_PRESTAMO;
+    }
+    private static void setUpUsuario(){
+        lbl1.setText("Email usuario:");
+        lbl2.setText("Nombre usuario:");
+        lbl3.setVisible(false);
+        txt3.setVisible(false);
+        tipoRegistro= REGISTRAR_USUARIO;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -29,184 +72,244 @@ public class PanelRegistro extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        encabezado = new javax.swing.JPanel();
-        titulo = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        txtIdUser = new javax.swing.JTextField();
-        txtLibro = new javax.swing.JTextField();
-        jTextField1 = new javax.swing.JTextField();
-        txtFecha = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        panelEncabezado = new javax.swing.JPanel();
+        encabezado = new javax.swing.JLabel();
+        lbl2 = new javax.swing.JLabel();
+        lbl1 = new javax.swing.JLabel();
+        lbl3 = new javax.swing.JLabel();
+        txt1 = new javax.swing.JTextField();
+        txt2 = new javax.swing.JTextField();
+        txt3 = new javax.swing.JTextField();
+        registrar = new javax.swing.JButton();
+        cancelar = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(204, 204, 204));
 
-        titulo.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
-        titulo.setText("Registro");
+        encabezado.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
+        encabezado.setText("Registro");
 
-        javax.swing.GroupLayout encabezadoLayout = new javax.swing.GroupLayout(encabezado);
-        encabezado.setLayout(encabezadoLayout);
-        encabezadoLayout.setHorizontalGroup(
-            encabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(encabezadoLayout.createSequentialGroup()
+        javax.swing.GroupLayout panelEncabezadoLayout = new javax.swing.GroupLayout(panelEncabezado);
+        panelEncabezado.setLayout(panelEncabezadoLayout);
+        panelEncabezadoLayout.setHorizontalGroup(
+            panelEncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelEncabezadoLayout.createSequentialGroup()
                 .addGap(58, 58, 58)
-                .addComponent(titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(encabezado, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        encabezadoLayout.setVerticalGroup(
-            encabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, encabezadoLayout.createSequentialGroup()
+        panelEncabezadoLayout.setVerticalGroup(
+            panelEncabezadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelEncabezadoLayout.createSequentialGroup()
                 .addContainerGap(33, Short.MAX_VALUE)
-                .addComponent(titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(encabezado, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30))
         );
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel1.setText("ISBN libro:");
+        lbl2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        lbl2.setForeground(new java.awt.Color(0, 0, 0));
+        lbl2.setText("ISBN libro:");
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel2.setText("Id usuario:");
+        lbl1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        lbl1.setForeground(new java.awt.Color(0, 0, 0));
+        lbl1.setText("Id usuario:");
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel3.setText("Fecha registro:");
+        lbl3.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        lbl3.setForeground(new java.awt.Color(0, 0, 0));
+        lbl3.setText("Fecha limite:");
 
-        jLabel4.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel4.setText("Fecha limite:");
-
-        txtIdUser.setBackground(new java.awt.Color(255, 255, 255));
-        txtIdUser.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtIdUser.setForeground(new java.awt.Color(255, 255, 255));
-        txtIdUser.addActionListener(new java.awt.event.ActionListener() {
+        txt1.setBackground(new java.awt.Color(255, 255, 255));
+        txt1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txt1.setForeground(new java.awt.Color(0, 0, 0));
+        txt1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtIdUserActionPerformed(evt);
+                txt1ActionPerformed(evt);
             }
         });
 
-        txtLibro.setBackground(new java.awt.Color(255, 255, 255));
-        txtLibro.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtLibro.setForeground(new java.awt.Color(255, 255, 255));
-        txtLibro.addActionListener(new java.awt.event.ActionListener() {
+        txt2.setBackground(new java.awt.Color(255, 255, 255));
+        txt2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txt2.setForeground(new java.awt.Color(0, 0, 0));
+        txt2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtLibroActionPerformed(evt);
+                txt2ActionPerformed(evt);
             }
         });
 
-        jTextField1.setEditable(false);
-        jTextField1.setBackground(new java.awt.Color(255, 255, 255));
-        jTextField1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jTextField1.setForeground(new java.awt.Color(255, 255, 255));
+        txt3.setBackground(new java.awt.Color(255, 255, 255));
+        txt3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txt3.setForeground(new java.awt.Color(0, 0, 0));
 
-        txtFecha.setBackground(new java.awt.Color(255, 255, 255));
-        txtFecha.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-
-        jButton1.setBackground(new java.awt.Color(0, 153, 0));
-        jButton1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jButton1.setText("Registrar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        registrar.setBackground(new java.awt.Color(0, 153, 0));
+        registrar.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        registrar.setForeground(new java.awt.Color(255, 255, 255));
+        registrar.setText("Registrar");
+        registrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                registrarActionPerformed(evt);
             }
         });
 
-        jButton2.setBackground(new java.awt.Color(51, 51, 51));
-        jButton2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jButton2.setText("Cancelar");
+        cancelar.setBackground(new java.awt.Color(51, 51, 51));
+        cancelar.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        cancelar.setForeground(new java.awt.Color(255, 255, 255));
+        cancelar.setText("Cancelar");
+        cancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(encabezado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(panelEncabezado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGap(69, 69, 69)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel4))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtFecha)
-                                    .addComponent(jTextField1)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(41, 41, 41)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtIdUser)
-                                    .addComponent(txtLibro)))))
+                .addGap(69, 69, 69)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(171, Short.MAX_VALUE)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(58, 58, 58)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(53, 53, 53)))
+                        .addComponent(lbl3)
+                        .addGap(26, 26, 26)
+                        .addComponent(txt3, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lbl2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lbl1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(41, 41, 41)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txt1)
+                            .addComponent(txt2))))
                 .addGap(87, 87, 87))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(119, 119, 119)
+                .addComponent(cancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(87, 87, 87)
+                .addComponent(registrar, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(encabezado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(panelEncabezado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(43, 43, 43)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(txtIdUser, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lbl1)
+                    .addComponent(txt1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(25, 25, 25)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(txtLibro, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lbl2)
+                    .addComponent(txt2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(40, 40, 40)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel4)
-                            .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(39, 39, 39)
-                        .addComponent(jLabel3))
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(35, 35, 35))
+                    .addComponent(lbl3)
+                    .addComponent(txt3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 155, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(registrar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(85, 85, 85))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtIdUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdUserActionPerformed
+    private void txt1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt1ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtIdUserActionPerformed
+    }//GEN-LAST:event_txt1ActionPerformed
 
-    private void txtLibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLibroActionPerformed
+    private void txt2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt2ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtLibroActionPerformed
+    }//GEN-LAST:event_txt2ActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void registrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registrarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+        String msj;
+        if(!registrar()){
+            msj = "Hubo un erro al hacer el registro";
+        }else{
+            msj = "El registro fue un exito";
+            switch (tipoRegistro) {
+                case REGISTRAR_LIBRO ->
+                    PanelDashboard.agregarLibro(libroAgregado);
+                case REGISTRAR_USUARIO ->
+                    PanelDashboard.agregarUsuario(usuarioAgregado);
+            }
+        }
+        JOptionPane.showMessageDialog(this, msj);
+        ((Frame) SwingUtilities.getWindowAncestor(PanelRegistro.this)).mostrarVentana("PanelDashboard");
+        cleanUp();
+    }//GEN-LAST:event_registrarActionPerformed
 
+    private void cancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelarActionPerformed
+        // TODO add your handling code here:
+        ((Frame) SwingUtilities.getWindowAncestor(PanelRegistro.this)).mostrarVentana("PanelDashboard");
+    }//GEN-LAST:event_cancelarActionPerformed
 
+    private boolean registrar(){
+        boolean flag = false;
+        switch(tipoRegistro){
+            case REGISTRAR_LIBRO ->{
+                libroAgregado = crearLibro();
+                if(libroAgregado != null)
+                    flag = gestor.gestionarLibros(TipoAccion.AGREGAR, libroAgregado);
+            }
+            case REGISTRAR_PRESTAMO -> System.out.println("not supported yet...");
+            case REGISTRAR_USUARIO -> {
+                usuarioAgregado = crearUsuario();
+                if(usuarioAgregado != null)
+                    flag = gestor.gestionarUsuarios(TipoAccion.AGREGAR, usuarioAgregado);
+            }
+        }
+        return flag;
+    }
+    
+    private void cleanUp(){
+        txt1.setText("");
+        txt2.setText("");
+        txt3.setText("");
+    }
+    
+    private LibroDTO crearLibro(){
+        LibroDTO libro = new LibroDTO();
+        String titulo = txt1.getText();
+        String autor = txt2.getText();
+        String isbn = txt3.getText();
+        
+        if(!titulo.isBlank() && !isbn.isBlank()){
+            libro.setTitulo(titulo);
+            libro.setIsbn(isbn);
+            if(autor.isBlank())
+                libro.setAutor("Autor desconocido");
+            else 
+                libro.setAutor(autor);
+            return libro;
+        }
+        JOptionPane.showMessageDialog(this, "No puede dejar campos vacios");
+        return null;
+    }
+    
+    private UsuarioDTO crearUsuario(){
+        UsuarioDTO usuario = new UsuarioDTO();
+        String email = txt1.getText();
+        String nombre = txt2.getText();
+        
+        if(!email.isBlank() && !nombre.isBlank()){
+            usuario.setEmail(email);
+            usuario.setNombre(nombre);
+            
+            return usuario;
+        }
+        JOptionPane.showMessageDialog(this, "No puede dejar campos vacios");
+        return null;
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel encabezado;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JLabel titulo;
-    private javax.swing.JTextField txtFecha;
-    private javax.swing.JTextField txtIdUser;
-    private javax.swing.JTextField txtLibro;
+    private javax.swing.JButton cancelar;
+    private javax.swing.JLabel encabezado;
+    private static javax.swing.JLabel lbl1;
+    private static javax.swing.JLabel lbl2;
+    private static javax.swing.JLabel lbl3;
+    private javax.swing.JPanel panelEncabezado;
+    private javax.swing.JButton registrar;
+    private javax.swing.JTextField txt1;
+    private javax.swing.JTextField txt2;
+    private static javax.swing.JTextField txt3;
     // End of variables declaration//GEN-END:variables
 }

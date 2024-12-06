@@ -4,8 +4,19 @@
  */
 package com.pruebas.gestionbiblioteca;
 
+import dtos.LibroDTO;
+import dtos.PrestamoDTO;
+import dtos.UsuarioDTO;
 import fachada.FachadaGestionBiblioteca;
+import fachada.TipoAccion;
+import fachada.TipoBusqueda;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.SwingUtilities;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -13,12 +24,24 @@ import javax.swing.SwingUtilities;
  */
 public class PanelDashboard extends javax.swing.JPanel {
     private FachadaGestionBiblioteca gestor;
+    private static List<UsuarioDTO> usuarios;
+    private static List<LibroDTO> libros;
+    private static List<PrestamoDTO> prestamos;
+    
+    private LibroDTO libroSeleccionado;
+    private UsuarioDTO usuarioSeleccionado;
+    
+    private static DefaultTableModel modeloTablaUsuarios;
+    private static DefaultTableModel modeloTablaLibros;
     /**
      * Creates new form PanelDashboard
      */
     public PanelDashboard(FachadaGestionBiblioteca gestor) {
         initComponents();
         this.gestor = gestor;
+        mostrarUsuarios();
+        btnRemoverLibro.setVisible(false);
+        btnRemoverUsuario.setVisible(false);
     }
 
     /**
@@ -39,17 +62,14 @@ public class PanelDashboard extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         tab1 = new javax.swing.JTabbedPane();
-        panelUsuarios = new javax.swing.JPanel();
-        btnAgregar = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tablaUsuarios = new javax.swing.JTable();
         panelLibros = new javax.swing.JPanel();
         btnBuscar = new javax.swing.JButton();
         txtBusqueda = new javax.swing.JTextField();
         filtros = new javax.swing.JComboBox<>();
         jScrollPane2 = new javax.swing.JScrollPane();
         tablaLibros = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        btnAggLibro = new javax.swing.JButton();
+        btnRemoverLibro = new javax.swing.JButton();
         panelPrestamos = new javax.swing.JPanel();
         btnRegistrarPrestamo = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -58,6 +78,11 @@ public class PanelDashboard extends javax.swing.JPanel {
         btnRegistrarDev = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
         tablaDevoluciones = new javax.swing.JTable();
+        panelUsuarios = new javax.swing.JPanel();
+        btnAgregarUser = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tablaUsuarios = new javax.swing.JTable();
+        btnRemoverUsuario = new javax.swing.JButton();
 
         jLabel1.setText("jLabel1");
 
@@ -98,92 +123,6 @@ public class PanelDashboard extends javax.swing.JPanel {
         tab1.setForeground(new java.awt.Color(51, 51, 51));
         tab1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
 
-        panelUsuarios.setBackground(new java.awt.Color(153, 153, 153));
-
-        btnAgregar.setBackground(new java.awt.Color(0, 153, 0));
-        btnAgregar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btnAgregar.setText("Agregar usuario");
-        btnAgregar.setMaximumSize(new java.awt.Dimension(132, 28));
-        btnAgregar.setMinimumSize(new java.awt.Dimension(132, 28));
-        btnAgregar.setPreferredSize(new java.awt.Dimension(132, 28));
-        btnAgregar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAgregarActionPerformed(evt);
-            }
-        });
-
-        tablaUsuarios.setBackground(new java.awt.Color(255, 255, 255));
-        tablaUsuarios.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        tablaUsuarios.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
-            },
-            new String [] {
-                "Id", "Nombre", "Correo", "Telfono", "Direccion"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        tablaUsuarios.setIntercellSpacing(new java.awt.Dimension(2, 2));
-        tablaUsuarios.setSelectionBackground(new java.awt.Color(153, 153, 153));
-        tablaUsuarios.setSelectionForeground(new java.awt.Color(0, 0, 0));
-        jScrollPane1.setViewportView(tablaUsuarios);
-
-        javax.swing.GroupLayout panelUsuariosLayout = new javax.swing.GroupLayout(panelUsuarios);
-        panelUsuarios.setLayout(panelUsuariosLayout);
-        panelUsuariosLayout.setHorizontalGroup(
-            panelUsuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelUsuariosLayout.createSequentialGroup()
-                .addGap(32, 32, 32)
-                .addGroup(panelUsuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 579, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(27, Short.MAX_VALUE))
-        );
-        panelUsuariosLayout.setVerticalGroup(
-            panelUsuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelUsuariosLayout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addComponent(btnAgregar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(31, Short.MAX_VALUE))
-        );
-
-        tab1.addTab("Usuarios", panelUsuarios);
-
         panelLibros.setBackground(new java.awt.Color(153, 153, 153));
         panelLibros.setMaximumSize(new java.awt.Dimension(650, 400));
         panelLibros.setMinimumSize(new java.awt.Dimension(650, 400));
@@ -210,50 +149,72 @@ public class PanelDashboard extends javax.swing.JPanel {
         filtros.setBackground(new java.awt.Color(204, 204, 204));
         filtros.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         filtros.setForeground(new java.awt.Color(0, 0, 0));
-        filtros.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "titulo", "autor", "isbn", "editorial" }));
+        filtros.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "titulo", "autor", "isbn" }));
 
         tablaLibros.setBackground(new java.awt.Color(255, 255, 255));
         tablaLibros.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         tablaLibros.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "Titulo", "Autor", "ISBN", "Editorial"
+                "Titulo", "Autor", "ISBN"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
         });
         jScrollPane2.setViewportView(tablaLibros);
 
-        jButton1.setBackground(new java.awt.Color(0, 153, 0));
-        jButton1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton1.setText("Agregar libro");
+        btnAggLibro.setBackground(new java.awt.Color(0, 153, 0));
+        btnAggLibro.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnAggLibro.setText("Agregar libro");
+        btnAggLibro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAggLibroActionPerformed(evt);
+            }
+        });
+
+        btnRemoverLibro.setBackground(new java.awt.Color(51, 51, 51));
+        btnRemoverLibro.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnRemoverLibro.setForeground(new java.awt.Color(255, 255, 255));
+        btnRemoverLibro.setText("Remover libro");
+        btnRemoverLibro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoverLibroActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelLibrosLayout = new javax.swing.GroupLayout(panelLibros);
         panelLibros.setLayout(panelLibrosLayout);
@@ -270,7 +231,10 @@ public class PanelDashboard extends javax.swing.JPanel {
             .addGroup(panelLibrosLayout.createSequentialGroup()
                 .addGap(35, 35, 35)
                 .addGroup(panelLibrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(panelLibrosLayout.createSequentialGroup()
+                        .addComponent(btnAggLibro, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30)
+                        .addComponent(btnRemoverLibro, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 576, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -289,7 +253,9 @@ public class PanelDashboard extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(panelLibrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnAggLibro, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
+                    .addComponent(btnRemoverLibro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(81, Short.MAX_VALUE))
         );
 
@@ -440,6 +406,109 @@ public class PanelDashboard extends javax.swing.JPanel {
 
         tab1.addTab("Devoluciones", panelDevoluciones);
 
+        panelUsuarios.setBackground(new java.awt.Color(153, 153, 153));
+
+        btnAgregarUser.setBackground(new java.awt.Color(0, 153, 0));
+        btnAgregarUser.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnAgregarUser.setText("Agregar usuario");
+        btnAgregarUser.setMaximumSize(new java.awt.Dimension(132, 28));
+        btnAgregarUser.setMinimumSize(new java.awt.Dimension(132, 28));
+        btnAgregarUser.setPreferredSize(new java.awt.Dimension(132, 28));
+        btnAgregarUser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAgregarUserActionPerformed(evt);
+            }
+        });
+
+        tablaUsuarios.setBackground(new java.awt.Color(255, 255, 255));
+        tablaUsuarios.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        tablaUsuarios.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "Id", "Nombre", "Email"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tablaUsuarios.setIntercellSpacing(new java.awt.Dimension(2, 2));
+        tablaUsuarios.setSelectionBackground(new java.awt.Color(153, 153, 153));
+        tablaUsuarios.setSelectionForeground(new java.awt.Color(0, 0, 0));
+        tablaUsuarios.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tablaUsuarios.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tablaUsuarios.setShowGrid(true);
+        tablaUsuarios.setShowHorizontalLines(true);
+        jScrollPane1.setViewportView(tablaUsuarios);
+
+        btnRemoverUsuario.setBackground(new java.awt.Color(51, 51, 51));
+        btnRemoverUsuario.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnRemoverUsuario.setForeground(new java.awt.Color(255, 255, 255));
+        btnRemoverUsuario.setText("Remover usuario");
+        btnRemoverUsuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoverUsuarioActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelUsuariosLayout = new javax.swing.GroupLayout(panelUsuarios);
+        panelUsuarios.setLayout(panelUsuariosLayout);
+        panelUsuariosLayout.setHorizontalGroup(
+            panelUsuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelUsuariosLayout.createSequentialGroup()
+                .addGap(32, 32, 32)
+                .addGroup(panelUsuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnRemoverUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAgregarUser, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 579, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(27, Short.MAX_VALUE))
+        );
+        panelUsuariosLayout.setVerticalGroup(
+            panelUsuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelUsuariosLayout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addComponent(btnAgregarUser, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(btnRemoverUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(71, Short.MAX_VALUE))
+        );
+
+        tab1.addTab("Usuarios", panelUsuarios);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -455,15 +524,17 @@ public class PanelDashboard extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(tab1, javax.swing.GroupLayout.PREFERRED_SIZE, 407, Short.MAX_VALUE))
+                .addComponent(tab1))
         );
 
         tab1.getAccessibleContext().setAccessibleName("usuarios");
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarActionPerformed
+    private void btnAgregarUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarUserActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnAgregarActionPerformed
+        PanelRegistro.setUpLabels(PanelRegistro.REGISTRAR_USUARIO);
+        ((Frame) SwingUtilities.getWindowAncestor(PanelDashboard.this)).mostrarVentana("PanelRegistro");
+    }//GEN-LAST:event_btnAgregarUserActionPerformed
 
     private void txtBusquedaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBusquedaActionPerformed
         // TODO add your handling code here:
@@ -471,25 +542,188 @@ public class PanelDashboard extends javax.swing.JPanel {
 
     private void btnRegistrarPrestamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarPrestamoActionPerformed
         // TODO add your handling code here:
+        PanelRegistro.setUpLabels(PanelRegistro.REGISTRAR_PRESTAMO);
         ((Frame) SwingUtilities.getWindowAncestor(PanelDashboard.this)).mostrarVentana("PanelRegistro");
     }//GEN-LAST:event_btnRegistrarPrestamoActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
         // TODO add your handling code here:
+        buscarLibro();
+        if(libros != null &&!libros.isEmpty()){
+            mostrarLibros();
+        }
     }//GEN-LAST:event_btnBuscarActionPerformed
 
     private void btnRegistrarDevActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarDevActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnRegistrarDevActionPerformed
 
+    private void btnAggLibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAggLibroActionPerformed
+        // TODO add your handling code here:
+        PanelRegistro.setUpLabels(PanelRegistro.REGISTRAR_LIBRO);
+        ((Frame) SwingUtilities.getWindowAncestor(PanelDashboard.this)).mostrarVentana("PanelRegistro");
+    }//GEN-LAST:event_btnAggLibroActionPerformed
 
+    private void btnRemoverUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverUsuarioActionPerformed
+        // TODO add your handling code here:
+        if(btnRemoverUsuario.isVisible()){
+            if (gestor.gestionarUsuarios(TipoAccion.ELIMINAR, usuarioSeleccionado)) {
+                JOptionPane.showMessageDialog(this, "Usuario eliminado exitosamente");
+                eliminarUsuario();
+            } else {
+                JOptionPane.showMessageDialog(this, "Hubo un error al eliminar el usuario");
+            }
+        }
+        
+    }//GEN-LAST:event_btnRemoverUsuarioActionPerformed
+
+    private void btnRemoverLibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverLibroActionPerformed
+        // TODO add your handling code here:
+        if(btnRemoverLibro.isVisible()){
+            if (gestor.gestionarLibros(TipoAccion.ELIMINAR, libroSeleccionado)) {
+                JOptionPane.showMessageDialog(this, "Libro eliminado exitosamente");
+                eliminarLibro();
+            } else {
+                JOptionPane.showMessageDialog(this, "Hubo un error al eliminar el libro");
+            }
+        }
+    }//GEN-LAST:event_btnRemoverLibroActionPerformed
+
+    private void eliminarLibro(){
+        int index = libros.indexOf(libroSeleccionado);
+        libros.remove(index);
+        modeloTablaLibros.removeRow(index);
+    }
+    
+    private void eliminarUsuario(){
+        int index = usuarios.indexOf(usuarioSeleccionado);
+        usuarios.remove(index);
+        modeloTablaUsuarios.removeRow(index);
+    }
+    
+    protected static void agregarLibro(LibroDTO libro){
+        libros.add(libro);
+        String titulo = libro.getTitulo();
+        String autor = libro.getAutor();
+        String isbn = libro.getIsbn();
+        String[] data = {titulo,autor,isbn};
+        modeloTablaLibros.addRow(data);
+    }
+    
+    protected static void agregarUsuario(UsuarioDTO usuario){
+        usuarios.add(usuario);
+        String email = usuario.getEmail();
+        String nombre = usuario.getNombre();
+        String id = String.valueOf(modeloTablaUsuarios.getRowCount()+1);
+        String[] data = {id,nombre,email};
+        modeloTablaUsuarios.addRow(data);
+    }
+    
+    
+    
+    private void buscarLibro(){
+        LibroDTO libroBuscado = new LibroDTO();
+        String busqueda = txtBusqueda.getText();
+        TipoBusqueda criterio;
+        if(!busqueda.isBlank()){
+            int index = filtros.getSelectedIndex();
+            switch (index) {
+                case 0 -> {
+                    libroBuscado.setTitulo(busqueda);
+                    criterio = TipoBusqueda.TITULO;
+                }
+                case 1 -> {
+                    libroBuscado.setAutor(busqueda);
+                    criterio = TipoBusqueda.AUTOR;
+                }
+                default -> {
+                    libroBuscado.setIsbn(busqueda);
+                    criterio = TipoBusqueda.ISBN;
+                }
+            }
+            libros = gestor.busquedaLibro(criterio, libroBuscado);
+        }
+    }
+    
+    private void obtenerUsuarios(){
+        List<UsuarioDTO> users = gestor.buscarUsuarios();
+        System.out.println("users: "+users);
+        if(users != null && !users.isEmpty())
+            usuarios = users;
+        else System.out.println("users null");
+    }
+    
+    private void mostrarUsuarios(){
+        obtenerUsuarios();
+        if(usuarios != null){
+            String[][] data = new String[usuarios.size()][3];
+            String[] columnNames = {"Id", "Nombre", "Email"};
+            int fila = 0;
+            for (UsuarioDTO usuario : usuarios) {
+                System.out.println("usuario: "+usuario);
+                data[fila][0] = usuario.getId();
+                data[fila][1] = usuario.getNombre();
+                data[fila][2] = usuario.getEmail();
+                fila++;
+            }
+            modeloTablaUsuarios = new DefaultTableModel(data, columnNames);
+            tablaUsuarios.getSelectionModel().addListSelectionListener(event -> listenerRowSelectionUsuarios(event));
+            tablaUsuarios.setModel(modeloTablaUsuarios);
+        }
+    }
+    
+    private void listenerRowSelectionLibros(ListSelectionEvent event){
+        if (!event.getValueIsAdjusting()) {
+            int filaSeleccionada = tablaLibros.getSelectedRow();
+
+            if (filaSeleccionada != -1) {
+                libroSeleccionado = libros.get(filaSeleccionada);
+                System.out.println("libro seleccionado: "+libroSeleccionado);
+                
+                btnRemoverLibro.setVisible(true);
+            }else
+                btnRemoverLibro.setVisible(false);
+        }
+    }
+    
+    private void listenerRowSelectionUsuarios(ListSelectionEvent event){
+        if (!event.getValueIsAdjusting()) {
+            int filaSeleccionada = tablaUsuarios.getSelectedRow();
+
+            if (filaSeleccionada != -1) {
+                usuarioSeleccionado = usuarios.get(filaSeleccionada);
+                System.out.println("user seleccioado: "+usuarioSeleccionado.getEmail());
+                
+                btnRemoverUsuario.setVisible(true);
+            }else
+                btnRemoverUsuario.setVisible(false);
+        }
+    }
+    
+    private void mostrarLibros(){
+        String[][] data = new String[libros.size()][4];
+        String [] columnNames = {"Titulo", "Autor", "ISBN"};
+        int fila = 0;
+        for (LibroDTO libro : libros) {
+            data[fila][0] = libro.getTitulo();
+            data[fila][1] = libro.getAutor();
+            data[fila][2] = libro.getIsbn();
+            fila++;
+        }
+        modeloTablaLibros = new DefaultTableModel(data, columnNames);
+        tablaLibros.getSelectionModel().addListSelectionListener(event -> listenerRowSelectionLibros(event));
+        tablaLibros.setModel(new javax.swing.table.DefaultTableModel(data, columnNames));
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAgregar;
+    private javax.swing.JButton btnAggLibro;
+    private javax.swing.JButton btnAgregarUser;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnRegistrarDev;
     private javax.swing.JButton btnRegistrarPrestamo;
+    private javax.swing.JButton btnRemoverLibro;
+    private javax.swing.JButton btnRemoverUsuario;
     private javax.swing.JComboBox<String> filtros;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
@@ -508,9 +742,9 @@ public class PanelDashboard extends javax.swing.JPanel {
     private javax.swing.JPanel panelUsuarios;
     private javax.swing.JTabbedPane tab1;
     private javax.swing.JTable tablaDevoluciones;
-    private javax.swing.JTable tablaLibros;
+    private static javax.swing.JTable tablaLibros;
     private javax.swing.JTable tablaPrestamos;
-    private javax.swing.JTable tablaUsuarios;
+    private static javax.swing.JTable tablaUsuarios;
     private javax.swing.JTextField txtBusqueda;
     // End of variables declaration//GEN-END:variables
 }

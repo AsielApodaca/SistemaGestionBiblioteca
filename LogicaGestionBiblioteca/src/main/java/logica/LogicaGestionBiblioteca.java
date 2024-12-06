@@ -6,7 +6,11 @@ package logica;
 
 import dtos.DevolucionDTO;
 import dtos.PrestamoDTO;
+import dtos.UsuarioDTO;
 import entidades.Prestamo;
+import entidades.Usuario;
+import fachada.FachadaGestionBiblioteca;
+import fachada.GestionBiblioteca;
 import java.util.Calendar;
 import java.util.List;
 
@@ -17,6 +21,8 @@ import java.util.List;
 public class LogicaGestionBiblioteca {
 
     public static void main(String[] args) {
+        GestionUsuarioServicio servicioUser = new GestionUsuarioServicio();
+        FachadaGestionBiblioteca fachada = GestionBiblioteca.getInstance();
         PrestamoDevolucionServicio servicio = new PrestamoDevolucionServicio();
 //        DevolucionDTO devolucion = new DevolucionDTO();
 //        devolucion.setIsbnLibro("978-9681603011");
@@ -37,11 +43,25 @@ public class LogicaGestionBiblioteca {
 //        else
 //            System.out.println("not success");
                 
-        List<Prestamo> prestamos = servicio.buscarPrestamos();
-        if(prestamos != null){
-            for (Prestamo prestamo : prestamos) {
-                
+
+        List<Usuario> users = servicioUser.buscarUsuarios();
+        List<UsuarioDTO> dtos = fachada.buscarUsuarios();
+        if(dtos != null){
+            for (UsuarioDTO dto : dtos) {
+                System.out.println("dto: "+dto);
             }
         }
+        
+        if(users != null){
+            for (Usuario user : users) {
+                System.out.println("user: "+user);
+            }
+        }
+//        List<Prestamo> prestamos = servicio.buscarPrestamos();
+//        if(prestamos != null){
+//            for (Prestamo prestamo : prestamos) {
+//                
+//            }
+//        }
     }
 }

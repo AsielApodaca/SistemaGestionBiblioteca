@@ -61,8 +61,9 @@ public class ConversionesServicio {
 
     public UsuarioDTO convertirUsuario(Usuario usuario) {
         UsuarioDTO usuarioDTO = new UsuarioDTO();
-        usuarioDTO.setEmail(usuarioDTO.getEmail());
-        usuarioDTO.setNombre(usuarioDTO.getNombre());
+        usuarioDTO.setId(String.valueOf(usuario.getId()));
+        usuarioDTO.setEmail(usuario.getEmail());
+        usuarioDTO.setNombre(usuario.getNombre());
         return usuarioDTO;
     }
 
