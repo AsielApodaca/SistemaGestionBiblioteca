@@ -24,7 +24,7 @@ public class Frame extends JFrame {
     public Frame() {
         setTitle("Sistema Gestor de Biblioteca");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(640, 400);
+        setSize(650, 600);
         setLocationRelativeTo(null);
         setResizable(false);
         

@@ -23,7 +23,7 @@ import java.util.List;
  * @author luisa M
  */
 public class PrestamoDevolucionServicio {
-    private IPrestamoDAO prestamoDAO;
+    private  IPrestamoDAO prestamoDAO;
     private ILibroDAO libroDAO;
     private IUsuarioDAO usuarioDAO;
     
@@ -56,8 +56,9 @@ public class PrestamoDevolucionServicio {
             prestamoNuevo.setLibro(libroPrestamo);
             prestamoNuevo.setUsuario(usuario);
             prestamoNuevo.setFechaPrestamo(Calendar.getInstance());
-            libroDAO.actualizarDisponibilidadLibro(libroPrestamo);
-            return prestamoDAO.registrarPrestamo(prestamoNuevo);
+            prestamoNuevo.setFechaLimite(prestamo.getFechaLimite());
+            if(prestamoDAO.registrarPrestamo(prestamoNuevo))
+                return libroDAO.actualizarDisponibilidadLibro(libroPrestamo);
         }
         return false;
     }
@@ -92,5 +93,30 @@ public class PrestamoDevolucionServicio {
         prestamo.setUsuario(usuario);
         
         return prestamoDAO.buscarPrestamosPorUsuario(prestamo);
+    }
+    
+    public List<Prestamo> buscarPrestamosPorFechaRegistro(PrestamoDTO prestamoDTO){
+        Prestamo prestamo = new Prestamo();
+        prestamo.setFechaPrestamo(prestamoDTO.getFechaRegistro());
+        
+        return prestamoDAO.buscarPrestamosPorFechaRegistro(prestamo);
+    }
+    
+    public List<Prestamo> buscarPrestamosPorFechaLimite(PrestamoDTO prestamoDTO){
+        Prestamo prestamo = new Prestamo();
+        prestamo.setFechaLimite(prestamoDTO.getFechaLimite());
+        
+        return prestamoDAO.buscarPrestamosPorFechaLimite(prestamo);
+    }
+    
+    public List<Prestamo> buscarPrestamosPorFechaDevolucion(PrestamoDTO prestamoDTO){
+        Prestamo prestamo = new Prestamo();
+        prestamo.setFechaDevolucion(prestamoDTO.getFechaDevolucion());
+        
+        return prestamoDAO.buscarPrestamosPorFechaDevolucion(prestamo);
+    }
+    
+    public List<Prestamo> buscarPrestamos(){
+        return prestamoDAO.buscarPrestamos();
     }
 }

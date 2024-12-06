@@ -95,6 +95,77 @@ public class PrestamoDAO implements IPrestamoDAO{
     }
     
     @Override
+    public List<Prestamo> buscarPrestamosPorFechaDevolucion(Prestamo prestamo) {
+        CriteriaQuery<Prestamo> criteria=cb.createQuery(Prestamo.class);
+        Root<Prestamo> root=criteria.from(Prestamo.class);
+        
+        Predicate predicate = cb.equal(root.<Calendar>get("fechaDevolucion"), prestamo.getFechaDevolucion());
+        criteria.select(root).where(predicate);
+        
+        TypedQuery<Prestamo> query=em.createQuery(criteria);
+        try {
+            List<Prestamo> prestamosConsultados=query.getResultList();
+            return prestamosConsultados;
+        } catch (IllegalStateException e) {
+            LOG.log(Level.SEVERE, e.getMessage() , e);
+        }
+        return null;
+    }
+    
+    @Override
+    public List<Prestamo> buscarPrestamosPorFechaLimite(Prestamo prestamo) {
+        CriteriaQuery<Prestamo> criteria=cb.createQuery(Prestamo.class);
+        Root<Prestamo> root=criteria.from(Prestamo.class);
+        
+        Predicate predicate = cb.equal(root.<Calendar>get("fechaLimite"), prestamo.getFechaLimite());
+        criteria.select(root).where(predicate);
+        
+        TypedQuery<Prestamo> query=em.createQuery(criteria);
+        try {
+            List<Prestamo> prestamosConsultados=query.getResultList();
+            return prestamosConsultados;
+        } catch (IllegalStateException e) {
+            LOG.log(Level.SEVERE, e.getMessage() , e);
+        }
+        return null;
+    }
+    
+    @Override
+    public List<Prestamo> buscarPrestamosPorFechaRegistro(Prestamo prestamo) {
+        CriteriaQuery<Prestamo> criteria=cb.createQuery(Prestamo.class);
+        Root<Prestamo> root=criteria.from(Prestamo.class);
+        
+        Predicate predicate = cb.equal(root.<Calendar>get("fechaPrestamo"), prestamo.getFechaPrestamo());
+        criteria.select(root).where(predicate);
+        
+        TypedQuery<Prestamo> query=em.createQuery(criteria);
+        try {
+            List<Prestamo> prestamosConsultados=query.getResultList();
+            return prestamosConsultados;
+        } catch (IllegalStateException e) {
+            LOG.log(Level.SEVERE, e.getMessage() , e);
+        }
+        return null;
+    }
+    
+    @Override
+    public List<Prestamo> buscarPrestamos() {
+        CriteriaQuery<Prestamo> criteria=cb.createQuery(Prestamo.class);
+        Root<Prestamo> root=criteria.from(Prestamo.class);
+        
+        criteria.select(root);
+        
+        TypedQuery<Prestamo> query = em.createQuery(criteria);
+        try {
+            List<Prestamo> prestamosConsultados = query.getResultList();
+            return prestamosConsultados;
+        } catch (IllegalStateException e) {
+            LOG.log(Level.SEVERE, e.getMessage(), e);
+        }
+        return null;
+    }
+    
+    @Override
     public boolean agregarFechaDevolucion(Prestamo prestamo){
         Prestamo prestamoDevuelto = em.find(Prestamo.class, prestamo.getId());
         try {

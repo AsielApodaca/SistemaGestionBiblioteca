@@ -5,11 +5,14 @@
 package fachada;
 
 import dtos.BibliotecarioDTO;
+import dtos.DevolucionDTO;
 import dtos.LibroDTO;
+import dtos.PrestamoDTO;
 import dtos.UsuarioDTO;
 import entidades.Bibliotecario;
 
 import entidades.Libro;
+import entidades.Prestamo;
 import java.util.ArrayList;
 import java.util.List;
 import logica.AutenticacionServicio;
@@ -108,6 +111,39 @@ public class GestionBiblioteca implements FachadaGestionBiblioteca {
     public List<LibroDTO> buscarLibros() {
         List<Libro> libros = gestionLibros.agregarLibros();
         return convertidor.convertirLibros(libros);
+    }
+
+    @Override
+    public boolean registrarPrestamo(PrestamoDTO prestamo) {
+        return gestionPrestamoDevolucion.registrarPrestamo(prestamo);
+    }
+
+    @Override
+    public boolean registrarDevolucion(DevolucionDTO devolucion) {
+        return gestionPrestamoDevolucion.devolverLibro(devolucion);
+    }
+
+    @Override
+    public PrestamoDTO buscarPrestamo(PrestamoDTO prestamo) {
+        return convertidor.convertirPrestamo(gestionPrestamoDevolucion.buscarPrestamoPorLibro(prestamo));
+    }
+
+    @Override
+    public List<PrestamoDTO> buscarPrestamos(FiltroBusquedaPrestamo filtro, PrestamoDTO prestamo) {
+        List<Prestamo> prestamos = new ArrayList<>();
+        switch (filtro) {
+            case FiltroBusquedaPrestamo.FECHA_DEVOLUCION -> {prestamos = gestionPrestamoDevolucion.buscarPrestamosPorFechaDevolucion(prestamo);}
+            case FiltroBusquedaPrestamo.FECHA_LIMITE -> {prestamos = gestionPrestamoDevolucion.buscarPrestamosPorFechaLimite(prestamo);}
+            case FiltroBusquedaPrestamo.FECHA_REGISTRO -> {prestamos = gestionPrestamoDevolucion.buscarPrestamosPorFechaRegistro(prestamo);}
+            case FiltroBusquedaPrestamo.USUARIO -> {prestamos = gestionPrestamoDevolucion.buscarPrestamosPorUsuario(prestamo);
+            }
+        }
+        return convertidor.convertirPrestamos(prestamos);
+    }
+    
+    @Override
+    public List<PrestamoDTO> buscarPrestamos() {
+        return convertidor.convertirPrestamos(gestionPrestamoDevolucion.buscarPrestamos());
     }
     
 }

@@ -21,36 +21,36 @@ import java.util.List;
  */
 public class ConversionesServicio {
 
-    public List<BibliotecarioDTO> convertirBibliotecarios(List<Bibliotecario> bibliotecarios){
+    public List<BibliotecarioDTO> convertirBibliotecarios(List<Bibliotecario> bibliotecarios) {
         List<BibliotecarioDTO> dtos = new ArrayList<>();
         for (Bibliotecario bibliotecario : bibliotecarios) {
             dtos.add(convertirBibliotecario(bibliotecario));
         }
         return dtos;
     }
-    
-    public BibliotecarioDTO convertirBibliotecario(Bibliotecario bibliotecario){
-        BibliotecarioDTO dto= new BibliotecarioDTO(bibliotecario.getUsuario(), bibliotecario.getContra());
+
+    public BibliotecarioDTO convertirBibliotecario(Bibliotecario bibliotecario) {
+        BibliotecarioDTO dto = new BibliotecarioDTO(bibliotecario.getUsuario(), bibliotecario.getContra());
         return dto;
     }
-    
-    public List<UsuarioDTO> convertirUsuarios(List<Usuario> usuarios){
+
+    public List<UsuarioDTO> convertirUsuarios(List<Usuario> usuarios) {
         List<UsuarioDTO> dtos = new ArrayList<>();
         for (Usuario usuario : usuarios) {
             dtos.add(convertirUsuario(usuario));
         }
         return dtos;
     }
-    
-    public List<LibroDTO> convertirLibros(List<Libro> libros){
+
+    public List<LibroDTO> convertirLibros(List<Libro> libros) {
         List<LibroDTO> dtos = new ArrayList<>();
         for (Libro libro : libros) {
             dtos.add(convertirLibro(libro));
         }
         return dtos;
     }
-    
-    public LibroDTO convertirLibro(Libro libro){
+
+    public LibroDTO convertirLibro(Libro libro) {
         LibroDTO dto = new LibroDTO();
         dto.setIsbn(libro.getIsbn());
         dto.setAutor(libro.getAutor());
@@ -59,22 +59,29 @@ public class ConversionesServicio {
         return dto;
     }
 
-    public UsuarioDTO convertirUsuario(Usuario usuario){
+    public UsuarioDTO convertirUsuario(Usuario usuario) {
         UsuarioDTO usuarioDTO = new UsuarioDTO();
         usuarioDTO.setEmail(usuarioDTO.getEmail());
         usuarioDTO.setNombre(usuarioDTO.getNombre());
         return usuarioDTO;
     }
-    
-    public PrestamoDTO convertirPrestamo(Prestamo prestamo) {
-    PrestamoDTO dto = new PrestamoDTO();
-    dto.setEmailUsuario(prestamo.getUsuario().getEmail());
-    dto.setFechaRegistro(prestamo.getFechaPrestamo());
-    dto.setIsbnLibro(prestamo.getLibro().getIsbn());
-    dto.setTituloLibro(prestamo.getLibro().getTitulo());
-    dto.setAutorLibro(prestamo.getLibro().getAutor());
-    return dto;
-}
 
+    public PrestamoDTO convertirPrestamo(Prestamo prestamo) {
+        PrestamoDTO dto = new PrestamoDTO();
+        dto.setEmailUsuario(prestamo.getUsuario().getEmail());
+        dto.setFechaRegistro(prestamo.getFechaPrestamo());
+        dto.setIsbnLibro(prestamo.getLibro().getIsbn());
+        dto.setTituloLibro(prestamo.getLibro().getTitulo());
+        dto.setAutorLibro(prestamo.getLibro().getAutor());
+        return dto;
+    }
     
+    public List<PrestamoDTO> convertirPrestamos(List<Prestamo> prestamos) {
+        List<PrestamoDTO> dtos = new ArrayList<>();
+        for (Prestamo prestamo : prestamos) {
+            dtos.add(convertirPrestamo(prestamo));
+        }
+        return dtos;
+    }
+        
 }
