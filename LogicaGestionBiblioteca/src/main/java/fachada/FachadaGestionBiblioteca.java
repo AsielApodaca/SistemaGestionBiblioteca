@@ -28,4 +28,5 @@ public interface FachadaGestionBiblioteca {
     public List<LibroDTO> busquedaLibro(TipoBusqueda criterio, LibroDTO libro);
     public List<LibroDTO> buscarLibros();
     public List<UsuarioDTO> buscarUsuarios();
+    public UsuarioDTO buscarUsuario(UsuarioDTO usuario);
 }

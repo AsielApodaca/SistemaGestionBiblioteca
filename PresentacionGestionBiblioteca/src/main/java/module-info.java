@@ -7,4 +7,7 @@ module PresentacionGestionBiblioteca {
     requires java.desktop;
     requires LogicaGestionBiblioteca;
     requires DTOGestionBiblioteca;
+    requires jdatepicker;
+
+    
 }

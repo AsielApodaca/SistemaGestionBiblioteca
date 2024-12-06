@@ -71,6 +71,9 @@ public class ConversionesServicio {
         PrestamoDTO dto = new PrestamoDTO();
         dto.setEmailUsuario(prestamo.getUsuario().getEmail());
         dto.setFechaRegistro(prestamo.getFechaPrestamo());
+        dto.setFechaLimite(prestamo.getFechaLimite());
+        if(prestamo.getFechaDevolucion() != null)
+            dto.setFechaDevolucion(prestamo.getFechaDevolucion());
         dto.setIsbnLibro(prestamo.getLibro().getIsbn());
         dto.setTituloLibro(prestamo.getLibro().getTitulo());
         dto.setAutorLibro(prestamo.getLibro().getAutor());

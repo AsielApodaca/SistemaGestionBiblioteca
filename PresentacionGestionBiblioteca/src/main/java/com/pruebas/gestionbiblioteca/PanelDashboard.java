@@ -4,13 +4,16 @@
  */
 package com.pruebas.gestionbiblioteca;
 
+import dtos.DevolucionDTO;
 import dtos.LibroDTO;
 import dtos.PrestamoDTO;
 import dtos.UsuarioDTO;
 import fachada.FachadaGestionBiblioteca;
 import fachada.TipoAccion;
 import fachada.TipoBusqueda;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -29,9 +32,11 @@ public class PanelDashboard extends javax.swing.JPanel {
     private static List<PrestamoDTO> prestamos;
     
     private LibroDTO libroSeleccionado;
+    private static PrestamoDTO prestamoSeleccionado;
     private UsuarioDTO usuarioSeleccionado;
     
     private static DefaultTableModel modeloTablaUsuarios;
+    private static DefaultTableModel modeloTablaPrestamos;
     private static DefaultTableModel modeloTablaLibros;
     /**
      * Creates new form PanelDashboard
@@ -40,6 +45,11 @@ public class PanelDashboard extends javax.swing.JPanel {
         initComponents();
         this.gestor = gestor;
         mostrarUsuarios();
+        buscarLibros();
+        mostrarLibros();
+        buscarPrestamos();
+        mostrarPrestamos();
+        btnDev.setVisible(false);
         btnRemoverLibro.setVisible(false);
         btnRemoverUsuario.setVisible(false);
     }
@@ -74,10 +84,7 @@ public class PanelDashboard extends javax.swing.JPanel {
         btnRegistrarPrestamo = new javax.swing.JButton();
         jScrollPane3 = new javax.swing.JScrollPane();
         tablaPrestamos = new javax.swing.JTable();
-        panelDevoluciones = new javax.swing.JPanel();
-        btnRegistrarDev = new javax.swing.JButton();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        tablaDevoluciones = new javax.swing.JTable();
+        btnDev = new javax.swing.JButton();
         panelUsuarios = new javax.swing.JPanel();
         btnAgregarUser = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -221,7 +228,7 @@ public class PanelDashboard extends javax.swing.JPanel {
         panelLibrosLayout.setHorizontalGroup(
             panelLibrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLibrosLayout.createSequentialGroup()
-                .addContainerGap(35, Short.MAX_VALUE)
+                .addContainerGap(47, Short.MAX_VALUE)
                 .addComponent(btnBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(txtBusqueda, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -310,6 +317,15 @@ public class PanelDashboard extends javax.swing.JPanel {
         });
         jScrollPane3.setViewportView(tablaPrestamos);
 
+        btnDev.setBackground(new java.awt.Color(0, 153, 0));
+        btnDev.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnDev.setText("Devolver libro");
+        btnDev.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDevActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelPrestamosLayout = new javax.swing.GroupLayout(panelPrestamos);
         panelPrestamos.setLayout(panelPrestamosLayout);
         panelPrestamosLayout.setHorizontalGroup(
@@ -317,94 +333,26 @@ public class PanelDashboard extends javax.swing.JPanel {
             .addGroup(panelPrestamosLayout.createSequentialGroup()
                 .addGap(34, 34, 34)
                 .addGroup(panelPrestamosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnRegistrarPrestamo)
+                    .addGroup(panelPrestamosLayout.createSequentialGroup()
+                        .addComponent(btnRegistrarPrestamo)
+                        .addGap(27, 27, 27)
+                        .addComponent(btnDev, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 578, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap(38, Short.MAX_VALUE))
         );
         panelPrestamosLayout.setVerticalGroup(
             panelPrestamosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelPrestamosLayout.createSequentialGroup()
                 .addGap(18, 18, 18)
-                .addComponent(btnRegistrarPrestamo, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(panelPrestamosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnRegistrarPrestamo, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDev, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addContainerGap(128, Short.MAX_VALUE))
         );
 
         tab1.addTab("Prestamos", panelPrestamos);
-
-        panelDevoluciones.setBackground(new java.awt.Color(153, 153, 153));
-
-        btnRegistrarDev.setBackground(new java.awt.Color(0, 153, 0));
-        btnRegistrarDev.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btnRegistrarDev.setText("Registrar devolucion");
-        btnRegistrarDev.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRegistrarDevActionPerformed(evt);
-            }
-        });
-
-        tablaDevoluciones.setBackground(new java.awt.Color(255, 255, 255));
-        tablaDevoluciones.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        tablaDevoluciones.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
-            },
-            new String [] {
-                "Id", "Usuario", "Libro", "Fecha devolucion", "Fecha esperada", "Dias de retraso"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
-        jScrollPane4.setViewportView(tablaDevoluciones);
-
-        javax.swing.GroupLayout panelDevolucionesLayout = new javax.swing.GroupLayout(panelDevoluciones);
-        panelDevoluciones.setLayout(panelDevolucionesLayout);
-        panelDevolucionesLayout.setHorizontalGroup(
-            panelDevolucionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelDevolucionesLayout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addGroup(panelDevolucionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnRegistrarDev, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 601, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(13, Short.MAX_VALUE))
-        );
-        panelDevolucionesLayout.setVerticalGroup(
-            panelDevolucionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelDevolucionesLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnRegistrarDev, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(117, 117, 117))
-        );
-
-        tab1.addTab("Devoluciones", panelDevoluciones);
 
         panelUsuarios.setBackground(new java.awt.Color(153, 153, 153));
 
@@ -470,7 +418,6 @@ public class PanelDashboard extends javax.swing.JPanel {
         tablaUsuarios.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tablaUsuarios.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tablaUsuarios.setShowGrid(true);
-        tablaUsuarios.setShowHorizontalLines(true);
         jScrollPane1.setViewportView(tablaUsuarios);
 
         btnRemoverUsuario.setBackground(new java.awt.Color(51, 51, 51));
@@ -493,7 +440,7 @@ public class PanelDashboard extends javax.swing.JPanel {
                     .addComponent(btnRemoverUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnAgregarUser, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 579, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addContainerGap(39, Short.MAX_VALUE))
         );
         panelUsuariosLayout.setVerticalGroup(
             panelUsuariosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -530,40 +477,6 @@ public class PanelDashboard extends javax.swing.JPanel {
         tab1.getAccessibleContext().setAccessibleName("usuarios");
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnAgregarUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarUserActionPerformed
-        // TODO add your handling code here:
-        PanelRegistro.setUpLabels(PanelRegistro.REGISTRAR_USUARIO);
-        ((Frame) SwingUtilities.getWindowAncestor(PanelDashboard.this)).mostrarVentana("PanelRegistro");
-    }//GEN-LAST:event_btnAgregarUserActionPerformed
-
-    private void txtBusquedaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBusquedaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtBusquedaActionPerformed
-
-    private void btnRegistrarPrestamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarPrestamoActionPerformed
-        // TODO add your handling code here:
-        PanelRegistro.setUpLabels(PanelRegistro.REGISTRAR_PRESTAMO);
-        ((Frame) SwingUtilities.getWindowAncestor(PanelDashboard.this)).mostrarVentana("PanelRegistro");
-    }//GEN-LAST:event_btnRegistrarPrestamoActionPerformed
-
-    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        // TODO add your handling code here:
-        buscarLibro();
-        if(libros != null &&!libros.isEmpty()){
-            mostrarLibros();
-        }
-    }//GEN-LAST:event_btnBuscarActionPerformed
-
-    private void btnRegistrarDevActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarDevActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnRegistrarDevActionPerformed
-
-    private void btnAggLibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAggLibroActionPerformed
-        // TODO add your handling code here:
-        PanelRegistro.setUpLabels(PanelRegistro.REGISTRAR_LIBRO);
-        ((Frame) SwingUtilities.getWindowAncestor(PanelDashboard.this)).mostrarVentana("PanelRegistro");
-    }//GEN-LAST:event_btnAggLibroActionPerformed
-
     private void btnRemoverUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverUsuarioActionPerformed
         // TODO add your handling code here:
         if(btnRemoverUsuario.isVisible()){
@@ -574,8 +487,20 @@ public class PanelDashboard extends javax.swing.JPanel {
                 JOptionPane.showMessageDialog(this, "Hubo un error al eliminar el usuario");
             }
         }
-        
+
     }//GEN-LAST:event_btnRemoverUsuarioActionPerformed
+
+    private void btnAgregarUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarUserActionPerformed
+        // TODO add your handling code here:
+        PanelRegistro.setUpLabels(PanelRegistro.REGISTRAR_USUARIO);
+        ((Frame) SwingUtilities.getWindowAncestor(PanelDashboard.this)).mostrarVentana("PanelRegistro");
+    }//GEN-LAST:event_btnAgregarUserActionPerformed
+
+    private void btnRegistrarPrestamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarPrestamoActionPerformed
+        // TODO add your handling code here:
+        PanelRegistro.setUpLabels(PanelRegistro.REGISTRAR_PRESTAMO);
+        ((Frame) SwingUtilities.getWindowAncestor(PanelDashboard.this)).mostrarVentana("PanelRegistro");
+    }//GEN-LAST:event_btnRegistrarPrestamoActionPerformed
 
     private void btnRemoverLibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoverLibroActionPerformed
         // TODO add your handling code here:
@@ -589,6 +514,42 @@ public class PanelDashboard extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnRemoverLibroActionPerformed
 
+    private void btnAggLibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAggLibroActionPerformed
+        // TODO add your handling code here:
+        PanelRegistro.setUpLabels(PanelRegistro.REGISTRAR_LIBRO);
+        ((Frame) SwingUtilities.getWindowAncestor(PanelDashboard.this)).mostrarVentana("PanelRegistro");
+    }//GEN-LAST:event_btnAggLibroActionPerformed
+
+    private void txtBusquedaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBusquedaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtBusquedaActionPerformed
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        // TODO add your handling code here:
+        buscarLibro();
+        if(libros != null &&!libros.isEmpty()){
+            mostrarLibros();
+        }
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void btnDevActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDevActionPerformed
+        // TODO add your handling code here:
+        devolverLibro();
+    }//GEN-LAST:event_btnDevActionPerformed
+
+    protected void devolverLibro(){
+        DevolucionDTO devolucion = new DevolucionDTO();
+        devolucion.setIsbnLibro(prestamoSeleccionado.getIsbnLibro());
+        boolean flag = gestor.registrarDevolucion(devolucion);
+        if(flag){
+            JOptionPane.showMessageDialog(this, "Devolucion registrada exitosamente");
+            int index = prestamos.indexOf(prestamoSeleccionado);
+            modeloTablaPrestamos.setValueAt(convertirFecha(Calendar.getInstance()), index, 4);
+            buscarLibros();
+            mostrarLibros();
+        }
+    }
+    
     private void eliminarLibro(){
         int index = libros.indexOf(libroSeleccionado);
         libros.remove(index);
@@ -619,7 +580,29 @@ public class PanelDashboard extends javax.swing.JPanel {
         modeloTablaUsuarios.addRow(data);
     }
     
+    protected static void agregarPrestamo(PrestamoDTO prestamo){
+        prestamos.add(prestamo);
+        String email = prestamo.getEmailUsuario();
+        String nombre = prestamo.getIsbnLibro();
+        String fechaRegistro = convertirFecha(prestamo.getFechaRegistro());
+        String fechaLimite= convertirFecha(prestamo.getFechaLimite());
+        String[] data = {email,nombre,fechaRegistro, fechaLimite};
+        modeloTablaUsuarios.addRow(data);
+    }
     
+    private void buscarLibros(){
+        List<LibroDTO> dtos = gestor.buscarLibros();
+        if(dtos!= null && !dtos.isEmpty()){
+            libros = dtos;
+        }
+    }
+    
+    private void buscarPrestamos(){
+        List<PrestamoDTO> dtos = gestor.buscarPrestamos();
+        if(dtos != null && !dtos.isEmpty()){
+            prestamos = dtos;
+        }
+    }
     
     private void buscarLibro(){
         LibroDTO libroBuscado = new LibroDTO();
@@ -672,6 +655,20 @@ public class PanelDashboard extends javax.swing.JPanel {
         }
     }
     
+    private void listenerRowSelectionPrestamo(ListSelectionEvent event){
+        if (!event.getValueIsAdjusting()) {
+            int filaSeleccionada = tablaPrestamos.getSelectedRow();
+
+            if (filaSeleccionada != -1) {
+                prestamoSeleccionado = prestamos.get(filaSeleccionada);
+                System.out.println("prestamo seleccionado: "+prestamoSeleccionado);
+                
+                btnDev.setVisible(true);
+            }else
+                btnDev.setVisible(false);
+        }
+    }
+    
     private void listenerRowSelectionLibros(ListSelectionEvent event){
         if (!event.getValueIsAdjusting()) {
             int filaSeleccionada = tablaLibros.getSelectedRow();
@@ -702,12 +699,16 @@ public class PanelDashboard extends javax.swing.JPanel {
     
     private void mostrarLibros(){
         String[][] data = new String[libros.size()][4];
-        String [] columnNames = {"Titulo", "Autor", "ISBN"};
+        String [] columnNames = {"Titulo", "Autor", "ISBN","Disponibilidad"};
         int fila = 0;
         for (LibroDTO libro : libros) {
             data[fila][0] = libro.getTitulo();
             data[fila][1] = libro.getAutor();
             data[fila][2] = libro.getIsbn();
+            if(libro.isDisponible())
+                data[fila][3] = "disponible";
+            else
+                data[fila][3] = "no disponible";
             fila++;
         }
         modeloTablaLibros = new DefaultTableModel(data, columnNames);
@@ -715,11 +716,35 @@ public class PanelDashboard extends javax.swing.JPanel {
         tablaLibros.setModel(new javax.swing.table.DefaultTableModel(data, columnNames));
     }
     
+    public static String convertirFecha(Calendar fecha) {
+        SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+        return formato.format(fecha.getTime());
+    }
+    
+    private void mostrarPrestamos(){
+        String[][] data = new String[prestamos.size()][5];
+        String [] columnNames = { "Usuario", "Libro","Fecha Prestamo","Fecha limite", "Fecha devolucion"};
+        int fila = 0;
+        System.out.println("prestamos: "+prestamos);
+        for (PrestamoDTO prestamo : prestamos) {
+            data[fila][0] = prestamo.getEmailUsuario();
+            data[fila][1] = prestamo.getIsbnLibro();
+            data[fila][2] = convertirFecha(prestamo.getFechaRegistro());
+            data[fila][3] = convertirFecha(prestamo.getFechaLimite());
+            if(prestamo.getFechaDevolucion()!= null)
+                data[fila][4] = convertirFecha(prestamo.getFechaDevolucion());
+            fila++;
+        }
+        modeloTablaPrestamos = new DefaultTableModel(data, columnNames);
+        tablaPrestamos.getSelectionModel().addListSelectionListener(event -> listenerRowSelectionPrestamo(event));
+        tablaPrestamos.setModel(new javax.swing.table.DefaultTableModel(data, columnNames));
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAggLibro;
     private javax.swing.JButton btnAgregarUser;
     private javax.swing.JButton btnBuscar;
-    private javax.swing.JButton btnRegistrarDev;
+    private javax.swing.JButton btnDev;
     private javax.swing.JButton btnRegistrarPrestamo;
     private javax.swing.JButton btnRemoverLibro;
     private javax.swing.JButton btnRemoverUsuario;
@@ -735,16 +760,13 @@ public class PanelDashboard extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JPanel panelDevoluciones;
     private javax.swing.JPanel panelLibros;
     private javax.swing.JPanel panelPrestamos;
     private javax.swing.JPanel panelUsuarios;
     private javax.swing.JTabbedPane tab1;
-    private javax.swing.JTable tablaDevoluciones;
-    private static javax.swing.JTable tablaLibros;
+    private javax.swing.JTable tablaLibros;
     private javax.swing.JTable tablaPrestamos;
-    private static javax.swing.JTable tablaUsuarios;
+    private javax.swing.JTable tablaUsuarios;
     private javax.swing.JTextField txtBusqueda;
     // End of variables declaration//GEN-END:variables
 }

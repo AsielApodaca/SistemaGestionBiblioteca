@@ -77,4 +77,20 @@ public class PrestamoDTO {
     public void setFechaDevolucion(Calendar fechaDevolucion) {
         this.fechaDevolucion = fechaDevolucion;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("PrestamoDTO{");
+        sb.append("isbnLibro=").append(isbnLibro);
+        sb.append(", tituloLibro=").append(tituloLibro);
+        sb.append(", autorLibro=").append(autorLibro);
+        sb.append(", emailUsuario=").append(emailUsuario);
+        sb.append(", fechaRegistro=").append(fechaRegistro);
+        sb.append(", fechaLimite=").append(fechaLimite);
+        sb.append(", fechaDevolucion=").append(fechaDevolucion);
+        sb.append('}');
+        return sb.toString();
+    }
+    
 }

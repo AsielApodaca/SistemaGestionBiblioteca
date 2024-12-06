@@ -106,6 +106,15 @@ public class GestionBiblioteca implements FachadaGestionBiblioteca {
         System.out.println("usuarios null");
         return null;
     }
+    @Override
+    public UsuarioDTO buscarUsuario(UsuarioDTO usuarioDTO) {
+        Usuario usuario = gestionUsuarios.buscarUsuario(usuarioDTO);
+        System.out.println("usuario del dao: "+usuario);
+        if(usuario != null)
+            return convertidor.convertirUsuario(usuario);
+        System.out.println("usuario null");
+        return null;
+    }
 
     @Override
     public boolean agregarBibliotecarios() {
